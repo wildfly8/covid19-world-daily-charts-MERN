@@ -12,6 +12,7 @@
   "author": "Tim Xu",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.2"
+    "axios": "^0.19.2",
+    "mongoose": "^5.9.17"
   }
 }
