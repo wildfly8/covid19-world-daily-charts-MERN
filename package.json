@@ -1,40 +1,22 @@
 {
-  "name": "covid19",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@material-ui/core": "^4.10.1",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
-    "axios": "^0.19.2",
-    "chart.js": "^2.9.3",
-    "classnames": "^2.2.6",
-    "react": "^16.13.1",
-    "react-chartjs-2": "^2.9.0",
-    "react-countup": "^4.3.3",
-    "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
-  },
+  "name": "root",
+  "version": "1.0.0",
+  "description": "",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm start\" ",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wildfly8/covid19-tracker.git"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "author": "wildfly8",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wildfly8/covid19-tracker/issues"
+  },
+  "homepage": "https://github.com/wildfly8/covid19-tracker#readme",
+  "devDependencies": {
+    "concurrently": "^5.2.0"
   }
 }
