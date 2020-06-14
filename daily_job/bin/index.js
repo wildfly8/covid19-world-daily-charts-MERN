@@ -21,20 +21,24 @@ const DB_NAME = 'covid19';
         //fetch api for all countries
         const allCountries = await fetchCountries();
         for(const country of allCountries) {
-            //fetch daily stats api for each country
-            const {confirmed, recovered, deaths, lastUpdate} = await fetchCountryDailyStats(country);
-            //save result for each country
-            const stats = new CountryDailyCovidStats({countryName: country, confirmed: confirmed.value, recovered: recovered.value, deaths: deaths.value, lastUpdate: lastUpdate});
-            await stats.save();
-            console.log(country + ' saved to country_daily_stats collection.');
-        }
+            try {
+                //fetch daily stats api for each country
+                const {confirmed, recovered, deaths, lastUpdate} = await fetchCountryDailyStats(country);
+                //save result for each country
+                const stats = new CountryDailyCovidStats({countryName: country, confirmed: confirmed.value, recovered: recovered.value, deaths: deaths.value, lastUpdate: lastUpdate});
+                await stats.save();
+                console.log(country + ' saved to country_daily_stats collection.');
+            } catch (err) {
+                console.log('error: ' + err);
+                continue;
+            }
+        } 
         db.close();
     } catch (err) {
         console.log('error: ' + err);
         db.close();
     }
   })();
-
 
 const fetchCountryDailyStats = async (country) => {
     let changeableUrl = url;

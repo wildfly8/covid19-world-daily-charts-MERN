@@ -18,5 +18,8 @@
   "homepage": "https://github.com/wildfly8/covid19-tracker#readme",
   "devDependencies": {
     "concurrently": "^5.2.0"
+  },
+  "dependencies": {
+    "mongoose": "^5.9.18"
   }
 }
