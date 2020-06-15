@@ -33,12 +33,14 @@ class App extends React.Component {
       <div className={styles.container}>
         <header>
           <h1>COVID-19 Global Daily Stats by Country</h1>
-          <p>- Provided by Monad Technologies, 2020</p>
         </header>
         <Charts timeSeries={dailyGlobalStats} countryPicked='Global' />
         {dailyStatsForMajorCountries.map((dailyStats, i) => <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats[0].countryName}/>)}
         <CountryPicker handleCountryChange={this.handleCountryChange} />
         <Cards snapshotStats={snapshotStats} />
+        <footer>
+          Provided by Monad Wisdom Technologies, 2020. If any suggestion, please email us at: wisdomspringtech@yahoo.com
+        </footer>
       </div>
     )
   }
