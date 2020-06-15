@@ -1,25 +1,22 @@
 {
-  "name": "root",
-  "version": "1.0.0",
-  "description": "",
+  "name": "server",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "dev": "concurrently --kill-others-on-fail \"cd server && npm run debug\" \"cd client && npm start\" ",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wildfly8/covid19-tracker.git"
-  },
-  "author": "wildfly8",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/wildfly8/covid19-tracker/issues"
-  },
-  "homepage": "https://github.com/wildfly8/covid19-tracker#readme",
-  "devDependencies": {
-    "concurrently": "^5.2.0"
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www",
+    "debug": "nodemon --inspect ./bin/www"
   },
   "dependencies": {
-    "mongoose": "^5.9.18"
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "mongoose": "^5.9.19",
+    "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "dotenv": "^8.2.0"
   }
 }
