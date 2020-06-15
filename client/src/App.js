@@ -35,7 +35,7 @@ class App extends React.Component {
           <h1>COVID-19 Global Daily Stats by Country</h1>
         </header>
         <Charts timeSeries={dailyGlobalStats} countryPicked='Global' />
-        {dailyStatsForMajorCountries.map((dailyStats, i) => <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats[0].countryName}/>)}
+        {dailyStatsForMajorCountries.map((dailyStats, i) => <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats? dailyStats[0].countryName : ''}/>)}
         <CountryPicker handleCountryChange={this.handleCountryChange} />
         <Cards snapshotStats={snapshotStats} />
         <footer>
