@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -44,7 +46,7 @@ app.use(function(err, req, res, next) {
 });
 
 //setup mongoDB datasource
-mongoose.connect(configDB.url, {
+mongoose.connect(process.env.MONGODB_URL || configDB.url, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
