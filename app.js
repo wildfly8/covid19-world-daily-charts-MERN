@@ -16,16 +16,17 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+//app.use('/', indexRouter);
+//app.use('/users', usersRouter);
+app.use('/api', apiRouter);
+
 if(process.env.NODE_ENV === 'production') { 
   app.use(express.static('client/build'));
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
 }
-
-//app.use('/', indexRouter);
-//app.use('/users', usersRouter);
-app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
