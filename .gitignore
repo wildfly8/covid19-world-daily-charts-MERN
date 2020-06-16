@@ -1,3 +1,4 @@
 .env
+mongodb_migration_command
 npm-debug.log
 /node_modules
