@@ -5,7 +5,10 @@ import CountryPicker from './components/CountryPicker/CountryPicker'
 import styles from './App.module.css';
 import { fetchAllDailyStatsForMajorCountries, fetchDailyData, fetchData } from './api';
 
-const majorCountries = ['US','Brazil', 'Russia', 'United Kingdom', 'Italy', 'France', 'Germany', 'Spain', 'Turkey', 'Iran', 'India', 'China', 'Korea; South', 'Japan'];
+const majorCountries = ['US', 'Canada', 'Brazil', 'Mexico', 'Argentina', 'Venezuela', 'Colombia', 'United Kingdom', 
+                        'Italy', 'France', 'Germany', 'Spain', 'Russia', 'Ukraine', 'Hungary', 'Poland', 'Israel', 
+                        'Turkey', 'Saudi Arabia', 'Iraq', 'Iran', 'India', 'Pakistan', 'South Africa', 'Singapore', 
+                        'Thailand', 'Vietnam', 'China', 'Korea; South', 'Japan', 'Australia', 'New Zealand'];
 
 class App extends React.Component {
 
