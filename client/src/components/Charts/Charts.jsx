@@ -26,6 +26,7 @@ const Chart = ({timeSeries, countryPicked}) => {
                         }],
                     }}
                     options = {{
+                        maintainAspectRatio: false,
                         title: {
                           display: true,
                           text: countryPicked + ' Confirmed',
@@ -38,9 +39,14 @@ const Chart = ({timeSeries, countryPicked}) => {
                         scales: {
                             yAxes: [{
                                 ticks: {
+                                    padding: 0,
+                                    labelOffset: 0,
                                     callback: function(value, index, values) {
+                                        if (index % 2 === 0) {
+                                            return '';
+                                        }
                                         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                    }
+                                    },
                                 }
                             }]
                         }
@@ -61,6 +67,7 @@ const Chart = ({timeSeries, countryPicked}) => {
                         }],
                     }}
                     options = {{
+                        maintainAspectRatio: false,
                         title: {
                           display: true,
                           text: countryPicked + ' Deaths',
@@ -73,9 +80,14 @@ const Chart = ({timeSeries, countryPicked}) => {
                         scales: {
                             yAxes: [{
                                 ticks: {
+                                    padding: 0,
+                                    labelOffset: 0,
                                     callback: function(value, index, values) {
+                                        if (index % 2 === 0) {
+                                            return '';
+                                        }
                                         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                    }
+                                    },
                                 }
                             }]
                         }
@@ -96,6 +108,7 @@ const Chart = ({timeSeries, countryPicked}) => {
                         }],
                     }}
                     options = {{
+                        maintainAspectRatio: false,
                         title: {
                           display: true,
                           text: countryPicked + ' Death Rate',
@@ -108,9 +121,14 @@ const Chart = ({timeSeries, countryPicked}) => {
                         scales: {
                             yAxes: [{
                                 ticks: {
+                                    padding: 0,
+                                    labelOffset: 0,
                                     callback: function(value, index, values) {
+                                        if (index % 2 === 0) {
+                                            return '';
+                                        }
                                         return (value * 100).toFixed(2) + '%';
-                                    }
+                                    },
                                 }
                             }]
                         }
@@ -131,6 +149,7 @@ const Chart = ({timeSeries, countryPicked}) => {
                         }],
                     }}
                     options = {{
+                        maintainAspectRatio: false,
                         title: {
                           display: true,
                           text: countryPicked + ' Recovery Rate',
@@ -143,9 +162,14 @@ const Chart = ({timeSeries, countryPicked}) => {
                         scales: {
                             yAxes: [{
                                 ticks: {
+                                    padding: 0,
+                                    labelOffset: 0,
                                     callback: function(value, index, values) {
+                                        if (index % 2 === 0) {
+                                            return '';
+                                        }
                                         return (value * 100).toFixed(2) + '%';
-                                    }
+                                    },
                                 }
                             }]
                         }
@@ -155,7 +179,18 @@ const Chart = ({timeSeries, countryPicked}) => {
 
     return (
         <div className={styles.container}>
-            {confirmedChart} {deathsChart} {deathRateChart} {recoveryRateChart}
+            <div className={styles.chart1}>
+                {confirmedChart}
+            </div>
+            <div className={styles.chart2}>
+                {deathsChart}
+            </div>
+            <div className={styles.chart3}>
+                {deathRateChart}
+            </div>
+            <div className={styles.chart4}>
+                {recoveryRateChart}
+            </div>
         </div>
     )
 }
