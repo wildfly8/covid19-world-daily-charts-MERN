@@ -30,7 +30,7 @@ const Chart = ({timeSeries, countryPicked}) => {
                         title: {
                           display: true,
                           text: countryPicked + ' Confirmed',
-                          fontSize: 20
+                          fontSize: 10
                         },
                         legend: {
                           display: false,
@@ -71,7 +71,7 @@ const Chart = ({timeSeries, countryPicked}) => {
                         title: {
                           display: true,
                           text: countryPicked + ' Deaths',
-                          fontSize: 20
+                          fontSize: 10
                         },
                         legend: {
                           display: false,
@@ -112,7 +112,7 @@ const Chart = ({timeSeries, countryPicked}) => {
                         title: {
                           display: true,
                           text: countryPicked + ' Death Rate',
-                          fontSize: 20
+                          fontSize: 10
                         },
                         legend: {
                           display: false,
@@ -153,7 +153,7 @@ const Chart = ({timeSeries, countryPicked}) => {
                         title: {
                           display: true,
                           text: countryPicked + ' Recovery Rate',
-                          fontSize: 20
+                          fontSize: 10
                         },
                         legend: {
                           display: false,
@@ -179,16 +179,16 @@ const Chart = ({timeSeries, countryPicked}) => {
 
     return (
         <div className={styles.container}>
-            <div className={styles.chart1}>
+            <div className={styles.chart}>
                 {confirmedChart}
             </div>
-            <div className={styles.chart2}>
+            <div className={styles.chart}>
                 {deathsChart}
             </div>
-            <div className={styles.chart3}>
+            <div className={styles.chart}>
                 {deathRateChart}
             </div>
-            <div className={styles.chart4}>
+            <div className={styles.chart}>
                 {recoveryRateChart}
             </div>
         </div>
