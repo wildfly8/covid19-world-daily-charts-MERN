@@ -30,7 +30,7 @@ const Chart = ({timeSeries, countryPicked}) => {
                         title: {
                           display: true,
                           text: countryPicked + ' Confirmed',
-                          fontSize: 10
+                          fontSize: 20
                         },
                         legend: {
                           display: false,
@@ -71,7 +71,7 @@ const Chart = ({timeSeries, countryPicked}) => {
                         title: {
                           display: true,
                           text: countryPicked + ' Deaths',
-                          fontSize: 10
+                          fontSize: 20
                         },
                         legend: {
                           display: false,
@@ -112,7 +112,7 @@ const Chart = ({timeSeries, countryPicked}) => {
                         title: {
                           display: true,
                           text: countryPicked + ' Death Rate',
-                          fontSize: 10
+                          fontSize: 20
                         },
                         legend: {
                           display: false,
@@ -153,7 +153,7 @@ const Chart = ({timeSeries, countryPicked}) => {
                         title: {
                           display: true,
                           text: countryPicked + ' Recovery Rate',
-                          fontSize: 10
+                          fontSize: 20
                         },
                         legend: {
                           display: false,
