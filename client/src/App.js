@@ -6,8 +6,7 @@ import styles from './App.module.css';
 import { fetchAllDailyStatsForMajorCountries, fetchDailyData, fetchData } from './api';
 
 const majorCountries = ['US', 'Canada', 'Mexico', 'Brazil', 'United Kingdom', 'Italy', 'France', 'Germany', 'Spain', 
-                        'Russia', 'Ukraine', 'Hungary', 'Poland', 'Israel', 'Turkey', 'Iraq', 'Iran', 'India', 
-                        'South Africa', 'China', 'Korea; South', 'Japan', 'Australia'];
+                        'Russia', 'Iran', 'India', 'China', 'Korea; South', 'Japan', 'Australia'];
 
 class App extends React.Component {
 
