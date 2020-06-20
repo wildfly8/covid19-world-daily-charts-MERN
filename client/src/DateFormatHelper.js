@@ -8,5 +8,5 @@ export const formatDate = (date) => {
     if (month < 10) {
         month = '0' + month;
     }
-    return year + '-' + month + '-' + dt;
+    return month + '-' + dt + '-' + year.toString().slice(-2);
 };

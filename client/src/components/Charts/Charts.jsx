@@ -17,7 +17,7 @@ const Chart = ({timeSeries, countryPicked}) => {
         timeSeries.length? 
                 (<Line
                     data = {{
-                        labels: timeSeries[0].date? timeSeries.map(({date}) => date) : timeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
+                        labels: timeSeries[0].date? timeSeries.map(({date}) => formatDate(date)) : timeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
                         datasets: [{
                             data: timeSeries.map(({confirmed}) => confirmed),
                             label: 'Confirmed',
@@ -58,7 +58,7 @@ const Chart = ({timeSeries, countryPicked}) => {
         timeSeries.length? 
                 (<Line
                     data = {{
-                        labels: timeSeries[0].date? timeSeries.map(({date}) => date) : timeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
+                        labels: timeSeries[0].date? timeSeries.map(({date}) => formatDate(date)) : timeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
                         datasets: [{
                             data: timeSeries.map(({deaths}) => deaths),
                             label: 'Deaths',
@@ -99,7 +99,7 @@ const Chart = ({timeSeries, countryPicked}) => {
         timeSeries.length? 
                 (<Line
                     data = {{
-                        labels: timeSeries[0].date? timeSeries.map(({date}) => date) : timeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
+                        labels: timeSeries[0].date? timeSeries.map(({date}) => formatDate(date)) : timeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
                         datasets: [{
                             data: timeSeries.map(({deaths, confirmed}) => (deaths / confirmed)),
                             label: 'Death Rate',
@@ -140,7 +140,7 @@ const Chart = ({timeSeries, countryPicked}) => {
         timeSeries.length? 
                 (<Line
                     data = {{
-                        labels: timeSeries[0].date? timeSeries.map(({date}) => date) : timeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
+                        labels: timeSeries[0].date? timeSeries.map(({date}) => formatDate(date)) : timeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
                         datasets: [{
                             data: timeSeries.map(({recovered, confirmed}) => (recovered / confirmed)),
                             label: 'Recovery Rate',

@@ -4,13 +4,20 @@ body {
 
 .container {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+    flex-direction: row;
 }
 
-@media (max-width: 770px) {
-    .container {
+.nav {
+    flex: 1 1 auto;
+    border-right: 3px dashed #bbb;
+}
+
+.charts {
+    flex: 1 1 auto;
+}
+
+/* @media (max-width: 770px) {
+    .chart {
         margin: 0 0 !important;
     }
-}
+} */
