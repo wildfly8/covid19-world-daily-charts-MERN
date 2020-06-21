@@ -49,6 +49,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
+  useFindAndModify: false,
 }).then(() =>  console.log('MongoDB covid19 connection successful.'))
 .catch((err) => console.error(err))
 

@@ -4,7 +4,7 @@ import styles from './Charts.module.css';
 import {formatDate} from '../../DateFormatHelper';
 
 
-const Chart = ({timeSeries, countryPicked}) => {
+const Chart = ({timeSeries, countryPicked, rank}) => {
 
     useEffect(() => {
         (async () => {
@@ -29,7 +29,7 @@ const Chart = ({timeSeries, countryPicked}) => {
                         maintainAspectRatio: false,
                         title: {
                           display: true,
-                          text: countryPicked + ' Confirmed',
+                          text: countryPicked + ' Confirmed' + (countryPicked === 'Global'? '' : ', Rank = ') + rank,
                           fontSize: 20
                         },
                         legend: {

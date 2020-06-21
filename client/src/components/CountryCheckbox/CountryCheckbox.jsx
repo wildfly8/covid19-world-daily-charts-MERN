@@ -1,36 +1,39 @@
-import React, {useState, useEffect} from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import blue from '@material-ui/core/colors/blue';
+import { blue } from '@material-ui/core/colors';
 
-const styles = {
-    root: {
-      color: blue[600],
-      '&$checked': {
-        color: blue[500],
-      },
-    },
-    checked: {},
-  };
+const useStyles = makeStyles(theme => ({
+  root: {
+    color: blue[500],
+    "&$checked": {
+      color: blue[600]
+    }
+  },
+  checked: {}
+}));
 
 const CountryCheckbox = ({checkboxLabel, checked, handleCountryChange}) => {
-    
-    useEffect(() => {
 
-    }, []);
+    const classes = useStyles();
 
     return (
         <FormControlLabel
             control={
                 <Checkbox
                     checked={checked}
-                    onChange={(e) => handleCountryChange(e.target.value)}
+                    value={checkboxLabel}
+                    onChange={(e) => handleCountryChange(e.target.checked, e.target.value)}
+                    classes={{
+                      root: classes.root,
+                      checked: classes.checked
+                    }}
                 />
             }
             label={checkboxLabel}
         />
-    )
+    );
 }
 
-export default withStyles(styles)(CountryCheckbox);
+export default CountryCheckbox;

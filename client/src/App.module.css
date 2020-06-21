@@ -1,15 +1,18 @@
 body {
-    background-color: rgb(250, 250, 250);
+    background-color: whitesmoke;
 }
 
 .container {
     display: flex;
     flex-direction: row;
+    border-top: 3px double #bbb;
 }
 
 .nav {
-    flex: 1 1 auto;
-    border-right: 3px dashed #bbb;
+    flex: 0 1 0;
+    border-right: 3px double #bbb;
+    display: flex;
+    flex-direction: column;
 }
 
 .charts {
