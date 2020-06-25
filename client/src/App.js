@@ -11,6 +11,7 @@ import Header from './components/Header';
 import Charts from './components/Charts/Charts'
 import CountryCheckbox from './components/CountryCheckbox/CountryCheckbox';
 import styles from './App.module.css';
+require('dotenv').config();
 
 let countUseContext = 0;
 const App = () => {

@@ -11,7 +11,6 @@ export default () => {
     <Menu fixed="top" inverted>
       <Container>
         <Menu.Item header>COVID-19 Global Daily Stats by Country</Menu.Item>
-        {/* {auth && auth.user && auth.user.name? (<Menu.Item><UserProfile /></Menu.Item>) : null} */}
       </Container>
 
       {auth.loading || !auth.user ? (
