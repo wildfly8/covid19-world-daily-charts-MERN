@@ -1,7 +1,24 @@
 import axios from 'axios';
+//import faker from 'faker';
+
+
+// const users = [...new Array(10)].map(() => ({
+//     id: faker.random.uuid(),
+//     avatar: faker.image.avatar(),
+//     username: faker.internet.userName(),
+//     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+//   }));
+
+// export const fetchUsers = async authUser =>
+//   authUser && authUser.groups.includes('Admins')
+//     ? users.map(user => ({
+//         ...faker.helpers.userCard(), ...user,
+//       }))
+//     : users;
 
 const url = 'https://covid19.mathdro.id/api';
-                     
+
+
 export const fetchAllDailyStatsForMajorCountries = async () => {
     try {
         const {data} = await axios.get(`/api/daily_stats/majorCountries`);  

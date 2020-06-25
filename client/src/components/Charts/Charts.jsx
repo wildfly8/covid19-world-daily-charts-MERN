@@ -1,25 +1,25 @@
 import React, {useEffect} from 'react';
 import {Line} from 'react-chartjs-2';
 import styles from './Charts.module.css';
-import {formatDate} from '../../DateFormatHelper';
+import { formatDate, transformToDailyNewStats } from '../../MyUtil';
 
 
 const Chart = ({timeSeries, countryPicked, rank}) => {
 
     useEffect(() => {
-        (async () => {
-            console.log('Apply Chart new side effect after DOM update...');
-        })();
-        return () => console.log('Clean up Chart old side effect after DOM update...');
+        console.log('Apply Chart side effect after DOM mount or update...');
+        return () => console.log('Clean up Chart side effect before DOM unmount...');
     }, []);
+
+    const transformedTimeSeries = transformToDailyNewStats(timeSeries);
 
     const confirmedChart = (
         timeSeries.length? 
                 (<Line
                     data = {{
-                        labels: timeSeries[0].date? timeSeries.map(({date}) => formatDate(date)) : timeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
+                        labels: timeSeries[0].date? transformedTimeSeries.map(({date}) => formatDate(date)) : transformedTimeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
                         datasets: [{
-                            data: timeSeries.map(({confirmed}) => confirmed),
+                            data: transformedTimeSeries.map(({confirmed}) => confirmed),
                             label: 'Confirmed',
                             borderColor: 'blue',
                             fill: true
@@ -29,7 +29,7 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
                         maintainAspectRatio: false,
                         title: {
                           display: true,
-                          text: countryPicked + ' Confirmed' + (countryPicked === 'Global'? '' : ', Rank = ') + rank,
+                          text: countryPicked + ' New Confirmed' + (countryPicked === 'Global'? '' : ', Rank = ') + rank,
                           fontSize: 20
                         },
                         legend: {
@@ -58,9 +58,9 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
         timeSeries.length? 
                 (<Line
                     data = {{
-                        labels: timeSeries[0].date? timeSeries.map(({date}) => formatDate(date)) : timeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
+                        labels: transformedTimeSeries[0].date? transformedTimeSeries.map(({date}) => formatDate(date)) : transformedTimeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
                         datasets: [{
-                            data: timeSeries.map(({deaths}) => deaths),
+                            data: transformedTimeSeries.map(({deaths}) => deaths),
                             label: 'Deaths',
                             borderColor: 'red',
                             fill: true
@@ -70,7 +70,7 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
                         maintainAspectRatio: false,
                         title: {
                           display: true,
-                          text: countryPicked + ' Deaths',
+                          text: countryPicked + ' New Deaths',
                           fontSize: 20
                         },
                         legend: {
