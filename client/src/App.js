@@ -13,8 +13,6 @@ import Charts from './components/Charts/Charts'
 import CountryCheckbox from './components/CountryCheckbox/CountryCheckbox';
 // @ts-ignore
 import styles from './App.module.css';
-import OktaSignIn from '@okta/okta-signin-widget';
-import '@okta/okta-signin-widget/dist/css/okta-sign-in.min.css';
 require('dotenv').config();
 
 
