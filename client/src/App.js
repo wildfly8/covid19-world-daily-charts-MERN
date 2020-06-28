@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
+// @ts-ignore
 import { Security, ImplicitCallback } from '@okta/okta-react';
 import { CssBaseline } from '@material-ui/core';
 import { AuthHandler, AuthProvider, AuthContext } from './Auth';
