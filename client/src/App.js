@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import { Security, ImplicitCallback } from '@okta/okta-react';
+import { CssBaseline } from '@material-ui/core';
 import { AuthHandler, AuthProvider, AuthContext } from './Auth';
 //import Cards from './components/Cards/Cards'
 //import CountryPicker from './components/CountryPicker/CountryPicker'
@@ -10,8 +11,12 @@ import { fetchAllDailyStatsForMajorCountries, fetchAllDailyStatsForCountries, fe
 import Header from './components/Header';
 import Charts from './components/Charts/Charts'
 import CountryCheckbox from './components/CountryCheckbox/CountryCheckbox';
+// @ts-ignore
 import styles from './App.module.css';
+import OktaSignIn from '@okta/okta-signin-widget';
+import '@okta/okta-signin-widget/dist/css/okta-sign-in.min.css';
 require('dotenv').config();
+
 
 let countUseContext = 0;
 const App = () => {
@@ -43,13 +48,13 @@ const App = () => {
     } else {
       setInterested({interestedCoutries: interestedCoutries.filter(item => country !== item), dailyStatsForCountries: dailyStatsForCountries.filter(dailyStats => country !== dailyStats[0].countryName)})
     }
-  }
-
+  }  
     return (
-      <div>
+      <React.Fragment>
+        <CssBaseline />
         <Header />
         {!isLoaded ? (
-          <h2 className={styles.container}>Loading All Country Daily Stats Charts...</h2>
+          <h2>Loading All Country Daily Stats Charts...</h2>
         ) : (
           <div className={styles.container}>
             <div className={styles.nav}>
@@ -57,19 +62,21 @@ const App = () => {
               {topCountries.map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCoutries.includes(country)} handleCountryChange={handleCountryChange} />)}
             </div>
             <div className={styles.charts}>
-              <Charts timeSeries={dailyGlobalStats} countryPicked='Global' rank=''/>
-              {dailyStatsForCountries.map((dailyStats, i) => <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName : ''} rank={topCountries.indexOf(dailyStats[0].countryName) + 1} />)}
-              {/* <CountryPicker handleCountryChange={handleCountryChange} />
-              <Cards snapshotStats={snapshotStats} /> */}
+                <Charts timeSeries={dailyGlobalStats} countryPicked='Global' rank=''/>
+                {dailyStatsForCountries.map((dailyStats, i) => <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName : ''} rank={topCountries.indexOf(dailyStats[0].countryName) + 1} />)}
+                {/* <CountryPicker handleCountryChange={handleCountryChange} />
+                <Cards snapshotStats={snapshotStats} /> */}
             </div>
           </div>
         )}
-        <footer align='center'>
-          <p>Visitors: {counter}</p>
-          Provided by Monad Wisdom Technologies, 2020. If any suggestion, please email us at: wisdomspringtech@yahoo.com
+        <footer 
+        // @ts-ignore
+        align="center">
+            <p>Visitors: {counter}</p>
+            Provided by Monad Wisdom Technologies, 2020. If any suggestion, please email us at: wisdomspringtech@yahoo.com
         </footer>
         <AuthHandler />
-      </div>
+      </React.Fragment>
     )
   }
 

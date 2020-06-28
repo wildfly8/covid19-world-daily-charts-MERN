@@ -2,6 +2,7 @@ import * as React from 'react';
 import { withRouter } from 'react-router-dom';
 import { withAuth } from '@okta/okta-react';
 
+// @ts-ignore
 export const AuthContext = React.createContext();
 
 // const getUserFromToken = token => {
@@ -26,6 +27,7 @@ export const AuthProvider = ({ children }) => {
   const updateAuth = async auth => {
     const token = (await auth.getIdToken()) || null;
     if (token !== state.token) {
+      // @ts-ignore
       setState({
         token,
         loading: false,
@@ -42,6 +44,7 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const AuthHandler = withAuth(
+  // @ts-ignore
   withRouter(({ auth, location }) => {
     const { updateAuth } = React.useContext(AuthContext);
 

@@ -5,13 +5,13 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { blue } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    color: blue[500],
-    "&$checked": {
-      color: blue[600]
-    }
-  },
-  checked: {}
+    root: {
+      color: blue[300],
+      "&$checked": {
+        color: blue[400],
+      }
+    },
+    checked: {}
 }));
 
 const CountryCheckbox = ({checkboxLabel, checked, handleCountryChange}) => {
