@@ -1,7 +1,7 @@
 export const formatDate = (date) => {
     let year = new Date(date).getFullYear();
     let month = new Date(date).getMonth() + 1;
-    let dt = new Date(date).getDate();
+    let dt = new Date(date).getUTCDate();
     if (dt < 10) {
         dt = '0' + dt;
     }
@@ -43,7 +43,11 @@ export const transformToDailyNewStats = (timeSeries) => {
         return timeSeries.map((moment, i) => {
             let momentCopy = {};
             if(i === 0) {
-                momentCopy.date = moment.date;
+                if(moment.date) {
+                    momentCopy.date = moment.date;
+                } else {
+                    momentCopy.lastUpdate = moment.lastUpdate;
+                }
                 momentCopy.confirmed = moment.confirmed;
                 momentCopy.deaths = moment.deaths;
             } else {

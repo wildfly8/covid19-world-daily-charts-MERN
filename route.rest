@@ -2,7 +2,7 @@ GET https://api.covid19api.com/countries
 
 ###
 
-GET https://api.covid19api.com/total/dayone/country/wallis-and-futuna-islands
+GET https://api.covid19api.com/total/country/united-states
 
 ###
 

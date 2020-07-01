@@ -13,7 +13,7 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
     }, []);
 
     // timeSeries.forEach(({deaths, confirmed, recovered, lastUpdate}) => {
-    //     console.log(countryPicked + ' timeSeries confirmed=' + confirmed + ', recovered=' + recovered + ', lastUpdate=' + lastUpdate)
+    //     console.log(countryPicked + ' timeSeries confirmed=' + confirmed + ', recovered=' + recovered + ', lastUpdateType=' + typeof(lastUpdate) + ', lastUpdate=' + lastUpdate)
     // });
     smoothTimeSeries(timeSeries);
     const transformedTimeSeries = transformToDailyNewStats(timeSeries);
@@ -22,10 +22,10 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
     // });
 
     const confirmedChart = (
-        timeSeries.length? 
+        transformedTimeSeries.length? 
                 (<Line
                     data = {{
-                        labels: timeSeries[0].date? transformedTimeSeries.map(({date}) => formatDate(date)) : transformedTimeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
+                        labels: transformedTimeSeries[0].date? transformedTimeSeries.map(({date}) => formatDate(date)) : transformedTimeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
                         datasets: [{
                             data: transformedTimeSeries.map(({confirmed}) => confirmed),
                             label: 'New Confirmed',
@@ -46,19 +46,7 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
                           position: 'right'
                         },
                         scales: {
-                            xAxes: [{
-                                ticks: {
-                                    padding: 0,
-                                    labelOffset: 0,
-                                    callback: function(value, index, values) {
-                                        if (index % 2 === 1) {
-                                            return '';
-                                        }
-                                        return value;
-                                    },
-                                }
-                            }],
-                            yAxes: [{
+                               yAxes: [{
                                 ticks: {
                                     padding: 0,
                                     labelOffset: 0,
@@ -76,7 +64,7 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
     );
 
     const deathsChart = (
-        timeSeries.length? 
+        transformedTimeSeries.length? 
                 (<Line
                     data = {{
                         labels: transformedTimeSeries[0].date? transformedTimeSeries.map(({date}) => formatDate(date)) : transformedTimeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
@@ -100,18 +88,6 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
                           position: 'right'
                         },
                         scales: {
-                            xAxes: [{
-                                ticks: {
-                                    padding: 0,
-                                    labelOffset: 0,
-                                    callback: function(value, index, values) {
-                                        if (index % 2 === 1) {
-                                            return '';
-                                        }
-                                        return value;
-                                    },
-                                }
-                            }],
                             yAxes: [{
                                 ticks: {
                                     padding: 0,
@@ -155,16 +131,6 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
                           position: 'top'
                         },
                         scales: {
-                            xAxes: [{
-                                ticks: {
-                                    callback: function(value, index, values) {
-                                        if (index % 2 === 1) {
-                                            return '';
-                                        }
-                                        return value;
-                                    },
-                                }
-                            }],
                             yAxes: [{
                                 ticks: {
                                     padding: 0,
@@ -208,18 +174,6 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
                           position: 'top'
                         },
                         scales: {
-                            xAxes: [{
-                                ticks: {
-                                    padding: 0,
-                                    labelOffset: 0,
-                                    callback: function(value, index, values) {
-                                        if (index % 2 === 1) {
-                                            return '';
-                                        }
-                                        return value;
-                                    },
-                                }
-                            }],
                             yAxes: [{
                                 ticks: {
                                     padding: 0,
