@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const CountryDailyCovidStatsSchema = new mongoose.Schema(
   {
     countryName: String,
+    countrySlug: String,
+    countryCode: String,
     confirmed: Number,
     recovered: Number,
     deaths: Number,

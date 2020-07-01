@@ -11,6 +11,33 @@ export const formatDate = (date) => {
     return month + '-' + dt + '-' + year.toString().slice(-2);
 };
 
+export const smoothTimeSeries = (timeSeries) => {
+    timeSeries.forEach((element, i) => {
+        if(i > 0) {
+            if(i < (timeSeries.length - 1)) {
+                if(element.confirmed < timeSeries[i - 1].confirmed) {
+                    element.confirmed = Math.max(Math.round((timeSeries[i - 1].confirmed + timeSeries[i + 1].confirmed) / 2), timeSeries[i - 1].confirmed);
+                }
+            } else {
+                if(element.confirmed < timeSeries[i - 1].confirmed) {
+                    element.confirmed = timeSeries[i - 1].Confirmed;
+                }
+            }
+        }
+        if(i > 0) {
+            if(i < (timeSeries.length - 1)) {
+                if(element.deaths < timeSeries[i - 1].deaths) {
+                    element.deaths = Math.max(Math.round((timeSeries[i - 1].deaths + timeSeries[i + 1].deaths) / 2), timeSeries[i - 1].deaths);
+                }
+            } else {
+                if(element.deaths < timeSeries[i - 1].deaths) {
+                    element.deaths = timeSeries[i - 1].deaths;
+                }
+            }
+        }
+    });
+}
+
 export const transformToDailyNewStats = (timeSeries) => {
     if(timeSeries) {
         return timeSeries.map((moment, i) => {
@@ -29,6 +56,6 @@ export const transformToDailyNewStats = (timeSeries) => {
                 momentCopy.deaths = moment.deaths - timeSeries[i-1].deaths;
             }
             return momentCopy;
-        }).filter((moment, i) => i > 0);
+        }).filter((moment, i) => (i > 0));
     }
 };

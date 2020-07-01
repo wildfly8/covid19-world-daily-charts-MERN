@@ -34,7 +34,7 @@ const App = () => {
       const {majorCountries, visitsCounter} = await fetchAllDailyStatsForMajorCountries();
       const initCoutries = majorCountries.slice(0, 10);
       setTopCountries(majorCountries);
-       setInterested({interestedCoutries: initCoutries, dailyStatsForCountries: await fetchAllDailyStatsForCountries(initCoutries)})
+      setInterested({interestedCoutries: initCoutries, dailyStatsForCountries: await fetchAllDailyStatsForCountries(initCoutries)})
       setDailyGlobalStats(await fetchDailyData());
       setCounter(visitsCounter);
       setIsLoaded(true);
@@ -45,7 +45,7 @@ const App = () => {
     if(checked) {
       setInterested({interestedCoutries: [...interestedCoutries, country], dailyStatsForCountries: [...dailyStatsForCountries, ...await fetchAllDailyStatsForCountries(country)]})
     } else {
-      setInterested({interestedCoutries: interestedCoutries.filter(item => country !== item), dailyStatsForCountries: dailyStatsForCountries.filter(dailyStats => country !== dailyStats[0].countryName)})
+      setInterested({interestedCoutries: interestedCoutries.filter(item => country !== item), dailyStatsForCountries: dailyStatsForCountries.filter(dailyStats => country !== dailyStats[0].countryName.replace(/,/g, ';'))})
     }
   }  
     return (
