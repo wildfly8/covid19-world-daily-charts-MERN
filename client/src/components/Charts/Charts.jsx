@@ -30,7 +30,8 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
                             data: transformedTimeSeries.map(({confirmed}) => confirmed),
                             label: 'New Confirmed',
                             borderColor: 'blue',
-                            fill: true
+                            pointRadius: 0,
+                            fill: true,
                         }],
                     }}
                     options = {{
@@ -83,7 +84,8 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
                             data: transformedTimeSeries.map(({deaths}) => deaths),
                             label: 'New Deaths',
                             borderColor: 'red',
-                            fill: true
+                            pointRadius: 0,
+                            fill: true,
                         }],
                     }}
                     options = {{
@@ -137,6 +139,7 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
                             data: deathRateSeries.map(({deaths, confirmed}) => (deaths / confirmed)),
                             label: 'Death Rate',
                             borderColor: 'red',
+                            pointRadius: 0,
                             fill: true,
                         }],
                     }}
@@ -189,6 +192,7 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
                             data: recoverRateSeries.map(({recovered, confirmed}) => (recovered / confirmed)),
                             label: 'Recovery Rate',
                             borderColor: 'green',
+                            pointRadius: 0,
                             fill: true,
                         }],
                     }}
