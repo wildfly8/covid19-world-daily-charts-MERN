@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchAllDailyStatsForMajorCountries, fetchAllDailyStatsForCountries, fetchDailyData } from './api';
 import Charts from './components/Charts/Charts'
 import CountryCheckbox from './CountryCheckbox';
+// @ts-ignore
 import styles from './App.module.css';
 require('dotenv').config();
 
@@ -77,7 +78,7 @@ const Home = () => {
           </div>
         )}
         <div className={styles.Footer}>
-          <footer align="center">
+          <footer>
             <p>Visitors: {counter}</p>
             Provided by Monad Wisdom Technologies, 2020. If any suggestion, please email us at: wisdomspringtech@yahoo.com
           </footer>
