@@ -9,7 +9,7 @@ export default {
     pkce: false,
     disableHttpsCheck: true,
     idps: [
-      {type: 'Facebook', id: '0oaht8zisaHual3pB4x6'}
+      {type: 'Facebook', id: process.env.REACT_APP_IDP_ID_FB}
       ],
     idpDisplay: "PRIMARY",
   },
