@@ -5,7 +5,6 @@ import Charts from './components/Charts/Charts'
 import CountryCheckbox from './CountryCheckbox';
 // @ts-ignore
 import styles from './App.module.css';
-require('dotenv').config();
 
 
 let countUseContext = 0;
