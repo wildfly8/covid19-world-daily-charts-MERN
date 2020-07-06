@@ -7,6 +7,7 @@ body {
     flex-direction: row;
     border-top: 3px double #bbb;
     position: relative; 
+    margin-top: 4em;
 }
 
 .nav {
@@ -14,11 +15,17 @@ body {
     border-right: 3px double #bbb;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 }
 
 .charts {
     flex: 1 1 auto;
+    flex-wrap: nowrap;
 }
+
+.Footer {
+    margin-top: 2em;
+  }
 
 /* @media (max-width: 770px) {
     .chart {
