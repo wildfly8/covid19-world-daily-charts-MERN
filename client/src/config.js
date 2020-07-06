@@ -1,5 +1,4 @@
 require('dotenv').config();
-console.log(JSON.stringify(process.env))
 
 export default {
   oidc: {
@@ -7,7 +6,7 @@ export default {
     issuer: `${process.env.REACT_APP_OKTA_ORG_URL}/oauth2/default`,
     redirectUri: `${window.location.origin}/implicit/callback`,
     scopes: ['openid', 'profile', 'email'],
-    pkce: true,
+    pkce: false,
     disableHttpsCheck: true,
     idps: [
       {type: 'Facebook', id: '0oaht8zisaHual3pB4x6'}
