@@ -18,6 +18,11 @@ body {
     justify-content: space-between;
 }
 
+.charts {
+    flex: 1 1 auto;
+    flex-wrap: nowrap;
+}
+
 .Footer {
     margin-top: 2em;
   }
