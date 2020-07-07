@@ -6,6 +6,10 @@ GET https://api.covid19api.com/total/country/united-states
 
 ###
 
+GET https://api.covid19api.com/dayone/country/canada
+
+
+###
 POST http://localhost:4000/api/sales
 Content-Type: application/json
 

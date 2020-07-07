@@ -18,9 +18,18 @@ const Login = () => {
       redirectUri,
       logo: '/react.svg',
       i18n: {
-        en: {
-          'primaryauth.title': 'Sign in to Monad Wisdom',
+        'en': {
+          'primaryauth.title': 'Sign in Monad Wisdom',
         },
+        'es': {
+          'primaryauth.title': 'Iniciar sesión Monad Wisdom'
+        },
+        'zh-CN': {
+          'primaryauth.title': '登录 如是智慧'
+        },
+        'zh-TW': {
+          'primaryauth.title': '登錄 如實智慧'
+        }
       },
       features: {
         registration: true,
