@@ -33,6 +33,14 @@ const DB_NAME = 'covid19';
         const allCountries = await fetchCountries();
         for(const { Slug, ISO2 } of allCountries) {
             try {
+                //init job
+                const allDailyRawStats = await fetchAllDailyStatsForCountry(Slug);
+                const allDailyStats = allDailyRawStats.map(({ Country, Confirmed, Deaths, Recovered, Date }) => {
+                    return new CountryDailyCovidStats({countryName: Country, countrySlug: Slug, countryCode: ISO2, confirmed: Confirmed, recovered: Recovered, deaths: Deaths, lastUpdate: Date});
+                });
+                await CountryDailyCovidStats.create(allDailyStats);
+                console.log(Slug + ' saved to country_daily_stats collection.');
+
                 //daily append job
                 // const allDailyRawStats = await fetchAllDailyStatsForCountry(Slug);
                 // if(allDailyRawStats && allDailyRawStats.length > 0) {
@@ -50,14 +58,6 @@ const DB_NAME = 'covid19';
                 //         console.log(Slug + ' skipped.');   
                 //     }
                 // }
-
-                //init job
-                const allDailyRawStats = await fetchAllDailyStatsForCountry(Slug);
-                const allDailyStats = allDailyRawStats.map(({ Country, Confirmed, Deaths, Recovered, Date }) => {
-                    return new CountryDailyCovidStats({countryName: Country, countrySlug: Slug, countryCode: ISO2, confirmed: Confirmed, recovered: Recovered, deaths: Deaths, lastUpdate: Date});
-                });
-                await CountryDailyCovidStats.create(allDailyStats);
-                console.log(Slug + ' saved to country_daily_stats collection.');
             } catch (err) {
                 console.log(Slug + ' error: ' + err);
                 continue;

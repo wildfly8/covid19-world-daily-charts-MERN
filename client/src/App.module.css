@@ -15,7 +15,9 @@ body {
     border-right: 3px double #bbb;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 
 .charts {
