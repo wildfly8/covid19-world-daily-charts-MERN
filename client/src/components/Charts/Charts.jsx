@@ -5,7 +5,7 @@ import styles from './Charts.module.css';
 import { formatDate, smoothTimeSeries, transformToDailyNewStats } from '../../MyUtil';
 
 
-const Chart = ({timeSeries, countryPicked, rank}) => {
+const Chart = ({timeSeries, countryPicked, rank, isProvince}) => {
 
     useEffect(() => {
         console.log('Apply Chart side effect after DOM mount or update...');
@@ -21,7 +21,7 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
     //     console.log(countryPicked + ' transformedTimeSeries deaths=' + deaths + ', recovered=' + recovered + ', lastUpdate=' + lastUpdate)
     // });
 
-    const confirmedChart = (
+    const confirmedChart =  (
         transformedTimeSeries.length? 
                 (<Line
                     data = {{
@@ -63,7 +63,7 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
                 />) :  null
     );
 
-    const deathsChart = (
+    const deathsChart = isProvince? (
         transformedTimeSeries.length? 
                 (<Line
                     data = {{
@@ -85,7 +85,60 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
                         },
                         legend: {
                           display: false,
-                          position: 'right'
+                          position: 'top'
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    padding: 0,
+                                    labelOffset: 0,
+                                    callback: function(value, index, values) {
+                                        if (index % 2 === 0) {
+                                            return '';
+                                        }
+                                        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    },
+                                }
+                            }]
+                        }
+                      }}
+                />) :  null
+    ) : (
+        transformedTimeSeries.length? 
+                (<Line
+                    data = {{
+                        labels: transformedTimeSeries[0].date? transformedTimeSeries.map(({date}) => formatDate(date)) : transformedTimeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
+                        datasets: [{
+                            data: transformedTimeSeries.map(({deaths}) => deaths),
+                            label: 'New Deaths',
+                            borderColor: 'red',
+                            pointRadius: 1,
+                            fill: true,
+                        }, {
+                            data: transformedTimeSeries.map(({otherDetails}) => otherDetails? otherDetails.onVentilatorCurrently : null),
+                            label: 'Ventilator',
+                            borderColor: 'pink',
+                            pointRadius: 1,
+                            fill: false,
+                        }, {
+                            data: transformedTimeSeries.map(({otherDetails}) => otherDetails? otherDetails.inIcuCurrently : null),
+                            label: 'ICU',
+                            borderColor: 'purple',
+                            pointRadius: 1,
+                            fill: false,
+                        }],
+                    }}
+                    options = {{
+                        maintainAspectRatio: false,
+                        title: {
+                          display: true,
+                          text: 'New Deaths',
+                          fontSize: 20
+                        },
+                        legend: {
+                          display: (transformedTimeSeries[transformedTimeSeries.length - 1].otherDetails && transformedTimeSeries[transformedTimeSeries.length - 1].otherDetails.inIcuCurrently)
+                            || (transformedTimeSeries[transformedTimeSeries.length - 1].otherDetails && transformedTimeSeries[transformedTimeSeries.length - 1].otherDetails.onVentilatorCurrently),
+                          position: 'top'
                         },
                         scales: {
                             yAxes: [{
@@ -191,7 +244,77 @@ const Chart = ({timeSeries, countryPicked, rank}) => {
                 />) :  null
     );
 
-    return (
+    const hospitalizedChart =  (
+        transformedTimeSeries.length? 
+                (<Line
+                    data = {{
+                        labels: transformedTimeSeries[0].date? transformedTimeSeries.map(({date}) => formatDate(date)) : transformedTimeSeries.map(({lastUpdate}) => formatDate(lastUpdate)),
+                        datasets: [{
+                            data: transformedTimeSeries.map(({otherDetails}) => otherDetails? otherDetails.hospitalizedCurrently : null),
+                            label: 'Hosptalized',
+                            borderColor: 'black',
+                            pointRadius: 1,
+                            fill: true,
+                        }, {
+                            data: transformedTimeSeries.map(({otherDetails}) => otherDetails? otherDetails.onVentilatorCurrently : null),
+                            label: 'Ventilator',
+                            borderColor: 'pink',
+                            pointRadius: 1,
+                            fill: false,
+                        }, {
+                            data: transformedTimeSeries.map(({otherDetails}) => otherDetails? otherDetails.inIcuCurrently : null),
+                            label: 'ICU',
+                            borderColor: 'purple',
+                            pointRadius: 1,
+                            fill: false,
+                        }],
+                    }}
+                    options = {{
+                        maintainAspectRatio: false,
+                        title: {
+                          display: true,
+                          text: 'Hosptalized',
+                          fontSize: 20
+                        },
+                        legend: {
+                          display: (transformedTimeSeries[transformedTimeSeries.length - 1].otherDetails && transformedTimeSeries[transformedTimeSeries.length - 1].otherDetails.inIcuCurrently)
+                            || (transformedTimeSeries[transformedTimeSeries.length - 1].otherDetails && transformedTimeSeries[transformedTimeSeries.length - 1].otherDetails.onVentilatorCurrently),
+                          position: 'top'
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    padding: 0,
+                                    labelOffset: 0,
+                                    callback: function(value, index, values) {
+                                        if (index % 2 === 0) {
+                                            return '';
+                                        }
+                                        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    },
+                                }
+                            }]
+                        }
+                      }}
+                />) :  null
+    );
+
+    return isProvince? (
+        <div className={styles.container}>
+            <div className={styles.chart}>
+                {confirmedChart}
+            </div>
+            <div className={styles.chart}>
+                {deathsChart}
+            </div>
+            <div className={styles.chart}>
+                {deathRateChart}
+            </div>
+            <div className={styles.chart}>
+                {hospitalizedChart}
+            </div>
+        </div>
+    ) : (
         <div className={styles.container}>
             <div className={styles.chart}>
                 {confirmedChart}

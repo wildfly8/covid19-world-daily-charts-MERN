@@ -69,8 +69,8 @@ const Home = () => {
               {topCountries.map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCoutries.includes(country)} handleCountryChange={handleCountryChange} />)}
             </div>
             <div className={styles.charts}>
-                <Charts timeSeries={dailyGlobalStats} countryPicked='Global' rank=''/>
-                {dailyStatsForCountries.map((dailyStats, i) => <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName : ''} rank={topCountries.indexOf(dailyStats[0].countryName) + 1} />)}
+                <Charts timeSeries={dailyGlobalStats} countryPicked='Global' rank='' isProvince={false} />
+                {dailyStatsForCountries.map((dailyStats, i) => <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName : ''} rank={topCountries.indexOf(dailyStats[0].countryName) + 1} isProvince={false} />)}
                 {/* <CountryPicker handleCountryChange={handleCountryChange} />
                 <Cards snapshotStats={snapshotStats} /> */}
             </div>

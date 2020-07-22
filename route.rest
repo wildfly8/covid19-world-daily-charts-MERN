@@ -6,7 +6,7 @@ GET https://api.covid19api.com/total/country/united-states
 
 ###
 
-GET https://api.covid19api.com/dayone/country/canada
+GET https://covidtracking.com/api/states/daily
 
 
 ###

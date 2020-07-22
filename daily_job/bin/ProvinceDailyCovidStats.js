@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 
-const CountryDailyCovidStatsSchema = new mongoose.Schema(
+const ProvinceDailyCovidStatsSchema = new mongoose.Schema(
   {
     countryName: String,
     countrySlug: String,
     countryCode: String,
+    province: String,
     confirmed: Number,
     recovered: Number,
     deaths: Number,
@@ -28,4 +29,4 @@ const CountryDailyCovidStatsSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('CountryDailyCovidStats', CountryDailyCovidStatsSchema, 'country_daily_stats');
+module.exports = mongoose.model('ProvinceDailyCovidStats', ProvinceDailyCovidStatsSchema, 'province_daily_stats');

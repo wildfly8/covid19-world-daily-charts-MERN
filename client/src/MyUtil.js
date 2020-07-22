@@ -59,6 +59,7 @@ export const transformToDailyNewStats = (timeSeries) => {
                 momentCopy.confirmed = moment.confirmed - timeSeries[i-1].confirmed;
                 momentCopy.deaths = moment.deaths - timeSeries[i-1].deaths;
             }
+            momentCopy.otherDetails = moment.otherDetails;
             return momentCopy;
         }).filter((moment, i) => (i > 0));
     }

@@ -1,7 +1,6 @@
 import axios from 'axios';
 //import faker from 'faker';
 
-
 // const users = [...new Array(10)].map(() => ({
 //     id: faker.random.uuid(),
 //     avatar: faker.image.avatar(),
@@ -31,6 +30,15 @@ export const fetchAllDailyStatsForMajorCountries = async () => {
 export const fetchAllDailyStatsForCountries = async (countryNames) => {
     try {
         const {data} = await axios.get(`/api/daily_stats?countryNames=${countryNames}`);  
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const fetchAllDailyStatsForProvinces = async (countryName) => {
+    try {
+        const {data} = await axios.get(`/api/daily_stats/province?countryNames=${countryName}`);  
         return data;
     } catch (error) {
         console.log(error);

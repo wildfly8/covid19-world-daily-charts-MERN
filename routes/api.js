@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const CountryDailyCovidStats = require('../models/CountryDailyCovidStats');
+const ProvinceDailyCovidStats = require('../models/ProvinceDailyCovidStats');
 const siteViews = require('../models/visits');
 const SiteViewsUp = require('../site_analysis/visitsUp');
 
@@ -36,6 +37,26 @@ router.get('/daily_stats', async (req, res) => {
       allDailyStats.push(await CountryDailyCovidStats.find({countryName: name.replace(/;/g, ',')}));
     }
     res.json(allDailyStats);
+  } catch (error) {
+      res.status(500).json({message: error.message})
+  }
+});
+
+router.get('/daily_stats/province', async (req, res) => {
+  //DB call
+  try {
+    const names = req.query.countryNames.split(',');
+    let allDailyProvinceStats = [];
+    for(const name of names) {
+      const provinces = await ProvinceDailyCovidStats
+        .find({countryName: name.replace(/;/g, ',')})
+        .distinct('province');
+      for(const province of provinces) {
+        allDailyProvinceStats.push(await ProvinceDailyCovidStats.find({province: province, countryName: name}));
+      };
+      allDailyProvinceStats.sort((a, b) => b[b.length - 1].confirmed - a[a.length - 1].confirmed);
+    }
+    res.json(allDailyProvinceStats);
   } catch (error) {
       res.status(500).json({message: error.message})
   }
