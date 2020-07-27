@@ -16,8 +16,8 @@ router.get('/daily_stats/majorCountries', async (req, res) => {
   .catch((err) => next(err))
   //DB call
   try {
-    //find top 10 countries with most confirmed cases
-    const {lastUpdate} = await CountryDailyCovidStats.findOne({}, {}, {sort: {'lastUpdate': -1}});
+    //find top 40 countries with most confirmed cases
+    const { lastUpdate } = await CountryDailyCovidStats.findOne({}, {}, {sort: {'lastUpdate': -1}});
     const majorCountries = await CountryDailyCovidStats
       .find({"lastUpdate": {"$gte": new Date(lastUpdate.getFullYear(), lastUpdate.getMonth(), lastUpdate.getDate())}})
       .sort({'confirmed': -1})
@@ -48,11 +48,11 @@ router.get('/daily_stats/province', async (req, res) => {
     const names = req.query.countryNames.split(',');
     let allDailyProvinceStats = [];
     for(const name of names) {
-      const provinces = await ProvinceDailyCovidStats
-        .find({countryName: name.replace(/;/g, ',')})
-        .distinct('province');
+      const allStatsForCountryQuery = ProvinceDailyCovidStats.find({countryName: name.replace(/;/g, ',')});
+      const allStatsForCountry = await allStatsForCountryQuery.exec();
+      const provinces = await allStatsForCountryQuery.distinct('province').exec();
       for(const province of provinces) {
-        allDailyProvinceStats.push(await ProvinceDailyCovidStats.find({province: province, countryName: name}));
+        allDailyProvinceStats.push(allStatsForCountry.filter(doc => doc.province === province));
       };
       allDailyProvinceStats.sort((a, b) => b[b.length - 1].confirmed - a[a.length - 1].confirmed);
     }

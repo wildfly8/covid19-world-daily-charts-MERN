@@ -17,10 +17,9 @@ import axios from 'axios';
 
 const url = 'https://covid19.mathdro.id/api';
 
-
 export const fetchAllDailyStatsForMajorCountries = async () => {
     try {
-        const {data} = await axios.get(`/api/daily_stats/majorCountries`);  
+        const {data} = await axios.get(`/api/daily_stats/majorCountries`);
         return data;
     } catch (error) {
         console.log(error);
