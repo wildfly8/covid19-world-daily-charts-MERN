@@ -8,12 +8,12 @@ import styles from './App.module.css';
 import useStateWithSessionStorage from './useStateWithSessionStorage';
 
 
-let countUseContext = 0;
+let countRenders = 0;
 
 const Home = () => {
   const { authState, authService } = useOktaAuth();
   const [userInfo, setUserInfo] = useState(null);
-  console.log('countUseContext=' + (++countUseContext) + ' user=' + (!authState.isAuthenticated || !userInfo? null : userInfo.name) )
+  console.log('countRenders=' + (++countRenders) + ' user=' + (!authState.isAuthenticated || !userInfo? null : userInfo.name) )
   const [majorCountries, setMajorCountries] = useStateWithSessionStorage('majorCountries');
   const [interested, setInterested] = React.useState({interestedCountries: [], dailyStatsForCountries: []});
   const {interestedCountries, dailyStatsForCountries} = interested;
