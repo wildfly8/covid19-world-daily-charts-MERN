@@ -16,7 +16,7 @@ const Province = () => {
 
   useEffect(() => {
     (async () => {
-      if(majorCountries) {
+      if(majorCountries && 'null' !== majorCountries) {
         const initCoutries = majorCountries.split(',').slice(0, 10);
         setInterested({interestedCountries: initCoutries[0], dailyProvinceStats: await fetchAllDailyStatsForProvinces(initCoutries[0])})
         setIsLoaded(true);
