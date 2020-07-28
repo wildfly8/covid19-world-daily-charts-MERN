@@ -5,6 +5,7 @@ import Charts from './components/Charts/Charts'
 import CountryCheckbox from './CountryCheckbox';
 // @ts-ignore
 import styles from './App.module.css';
+import useStateWithSessionStorage from './useStateWithSessionStorage';
 
 
 let countUseContext = 0;
@@ -13,9 +14,9 @@ const Home = () => {
   const { authState, authService } = useOktaAuth();
   const [userInfo, setUserInfo] = useState(null);
   console.log('countUseContext=' + (++countUseContext) + ' user=' + (!authState.isAuthenticated || !userInfo? null : userInfo.name) )
-  const [topCountries, setTopCountries] = React.useState([]);
-  const [interested, setInterested] = React.useState({interestedCoutries: [], dailyStatsForCountries: []});
-  const {interestedCoutries, dailyStatsForCountries} = interested;
+  const [majorCountries, setMajorCountries] = useStateWithSessionStorage('majorCountries');
+  const [interested, setInterested] = React.useState({interestedCountries: [], dailyStatsForCountries: []});
+  const {interestedCountries, dailyStatsForCountries} = interested;
   const [dailyGlobalStats, setDailyGlobalStats] = React.useState([]);
   const [counter, setCounter] = React.useState('');
   const [isLoaded, setIsLoaded] = React.useState(false);
@@ -33,20 +34,20 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       const {majorCountries, visitsCounter} = await fetchAllDailyStatsForMajorCountries();
+      setMajorCountries(majorCountries);
       const initCoutries = majorCountries.slice(0, 10);
-      setTopCountries(majorCountries);
-      setInterested({interestedCoutries: initCoutries, dailyStatsForCountries: await fetchAllDailyStatsForCountries(initCoutries)})
+      setInterested({interestedCountries: initCoutries, dailyStatsForCountries: await fetchAllDailyStatsForCountries(initCoutries)})
       setDailyGlobalStats(await fetchDailyData());
       setCounter(visitsCounter);
       setIsLoaded(true);
     })();
-  }, []);
+  }, [setMajorCountries]);
 
   const handleCountryChange = async (checked, country) => {
     if(checked) {
-      setInterested({interestedCoutries: [...interestedCoutries, country], dailyStatsForCountries: [...dailyStatsForCountries, ...await fetchAllDailyStatsForCountries(country)]})
+      setInterested({interestedCountries: [...interestedCountries, country], dailyStatsForCountries: [...dailyStatsForCountries, ...await fetchAllDailyStatsForCountries(country)]})
     } else {
-      setInterested({interestedCoutries: interestedCoutries.filter(item => country !== item), dailyStatsForCountries: dailyStatsForCountries.filter(dailyStats => country !== dailyStats[0].countryName.replace(/,/g, ';'))})
+      setInterested({interestedCountries: interestedCountries.filter(item => country !== item), dailyStatsForCountries: dailyStatsForCountries.filter(dailyStats => country !== dailyStats[0].countryName.replace(/,/g, ';'))})
     }
   };
 
@@ -66,11 +67,11 @@ const Home = () => {
           <div className={styles.container}>
             <div className={styles.nav}>
               <h3>Top 40 Countries</h3>(Sort by Confirmed Cases as of Today):
-              {topCountries.map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCoutries.includes(country)} handleCountryChange={handleCountryChange} />)}
+              {majorCountries.map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCountries.includes(country)} handleCountryChange={handleCountryChange} />)}
             </div>
             <div className={styles.charts}>
                 <Charts timeSeries={dailyGlobalStats} countryPicked='Global' rank='' isProvince={false} />
-                {dailyStatsForCountries.map((dailyStats, i) => <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName : ''} rank={topCountries.indexOf(dailyStats[0].countryName) + 1} isProvince={false} />)}
+                {dailyStatsForCountries.map((dailyStats, i) => <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName : ''} rank={majorCountries.indexOf(dailyStats[0].countryName) + 1} isProvince={false} />)}
                 {/* <CountryPicker handleCountryChange={handleCountryChange} />
                 <Cards snapshotStats={snapshotStats} /> */}
             </div>
