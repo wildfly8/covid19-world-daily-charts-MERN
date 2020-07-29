@@ -5,8 +5,9 @@ import './polyfills';
 import App from './App';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
+import { MyContextProvider } from './MyContext';
 
 /* global document */
 /* eslint-disable react/jsx-filename-extension */
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<MyContextProvider><App /></MyContextProvider>, document.getElementById('root'));
 registerServiceWorker();

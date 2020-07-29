@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { fetchAllDailyStatsForProvinces } from './api';
 import Charts from './components/Charts/Charts'
 import CountryCheckbox from './CountryCheckbox';
 // @ts-ignore
 import styles from './App.module.css';
 import useStateWithSessionStorage from './useStateWithSessionStorage';
-
+import { MyContext } from './MyContext';
 
 const Province = () => {
-
   const [majorCountries] = useStateWithSessionStorage('majorCountries');
   const [interested, setInterested] = useState({interestedCountries: [], dailyProvinceStats: []});
   const {interestedCountries, dailyProvinceStats} = interested;
   const [isLoaded, setIsLoaded] = useState(false);
+  const [visitsCounter] = useContext(MyContext);
 
   useEffect(() => {
     (async () => {
@@ -49,6 +49,12 @@ const Province = () => {
             </div>
           </div>
         )}
+        <div className={styles.Footer}>
+          <footer>
+            <p>Visitors: {visitsCounter}</p>
+            Provided by Monad Wisdom Technologies, 2020. If any suggestion, please email us at: wisdomspringtech@yahoo.com
+          </footer>
+        </div>
     </div>
   );
 };

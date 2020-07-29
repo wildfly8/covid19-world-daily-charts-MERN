@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { BrowserRouter as Router, Route, useHistory } from 'react-router-dom';
 import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
 import { Container } from 'semantic-ui-react';
@@ -9,6 +9,8 @@ import Province from './Province';
 import Messages from './Messages';
 import Navbar from './Navbar';
 import Profile from './Profile';
+import { MyContext } from './MyContext';
+import { fetchVisitsCounter } from './api';
 
 
 const HasAccessToRouter = () => {
@@ -37,12 +39,19 @@ const HasAccessToRouter = () => {
   );
 };
 
-const App = () => (
-  <div>
+const App = () => {
+  const [, setVisitsCounter] = useContext(MyContext);
+
+  useEffect(() => {
+    (async () => {
+      setVisitsCounter(await fetchVisitsCounter());
+    })();
+  }, [setVisitsCounter]);
+
+  return (
     <Router>
       <HasAccessToRouter />
     </Router>
-  </div>
-);
+)};
 
 export default App;

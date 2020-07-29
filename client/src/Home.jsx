@@ -1,12 +1,12 @@
 import { useOktaAuth } from '@okta/okta-react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { fetchAllDailyStatsForMajorCountries, fetchAllDailyStatsForCountries, fetchDailyData } from './api';
 import Charts from './components/Charts/Charts'
 import CountryCheckbox from './CountryCheckbox';
 // @ts-ignore
 import styles from './App.module.css';
 import useStateWithSessionStorage from './useStateWithSessionStorage';
-
+import { MyContext } from './MyContext';
 
 let countRenders = 0;
 
@@ -18,8 +18,8 @@ const Home = () => {
   const [interested, setInterested] = React.useState({interestedCountries: [], dailyStatsForCountries: []});
   const {interestedCountries, dailyStatsForCountries} = interested;
   const [dailyGlobalStats, setDailyGlobalStats] = React.useState([]);
-  const [counter, setCounter] = React.useState('');
   const [isLoaded, setIsLoaded] = React.useState(false);
+  const [visitsCounter] = useContext(MyContext);
 
   useEffect(() => {
     if (!authState.isAuthenticated) {
@@ -33,12 +33,11 @@ const Home = () => {
 
   useEffect(() => {
     (async () => {
-      const {majorCountries, visitsCounter} = await fetchAllDailyStatsForMajorCountries();
+      const majorCountries = await fetchAllDailyStatsForMajorCountries();
       setMajorCountries(majorCountries);
       const initCoutries = majorCountries.slice(0, 10);
       setInterested({interestedCountries: initCoutries, dailyStatsForCountries: await fetchAllDailyStatsForCountries(initCoutries)})
       setDailyGlobalStats(await fetchDailyData());
-      setCounter(visitsCounter);
       setIsLoaded(true);
     })();
   }, [setMajorCountries]);
@@ -79,7 +78,7 @@ const Home = () => {
         )}
         <div className={styles.Footer}>
           <footer>
-            <p>Visitors: {counter}</p>
+            <p>Visitors: {visitsCounter}</p>
             Provided by Monad Wisdom Technologies, 2020. If any suggestion, please email us at: wisdomspringtech@yahoo.com
           </footer>
         </div>

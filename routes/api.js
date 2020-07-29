@@ -5,15 +5,20 @@ const ProvinceDailyCovidStats = require('../models/ProvinceDailyCovidStats');
 const siteViews = require('../models/visits');
 const SiteViewsUp = require('../site_analysis/visitsUp');
 
-router.get('/daily_stats/majorCountries', async (req, res) => {
+router.get('/visitsCounter', async (req, res) => {
   //api source analysis upon user first arrival
   let visitsCounter = 0;
-  SiteViewsUp.siteViewsUp();
-  siteViews.findById('5ee99d1119c7f231545d495d')
-  .then((data) => {
-    visitsCounter = data.counter;
-  }, (err) => {next(err)})
-  .catch((err) => next(err))
+  try {
+    SiteViewsUp.siteViewsUp();
+     const data = await siteViews.findById('5ee99d1119c7f231545d495d')
+     visitsCounter = data.counter;
+    res.json(visitsCounter);
+  } catch (error) {
+      res.status(500).json({message: error.message})
+  }
+});
+
+router.get('/daily_stats/majorCountries', async (req, res) => {
   //DB call
   try {
     //find top 40 countries with most confirmed cases
@@ -22,7 +27,7 @@ router.get('/daily_stats/majorCountries', async (req, res) => {
       .find({"lastUpdate": {"$gte": new Date(lastUpdate.getFullYear(), lastUpdate.getMonth(), lastUpdate.getDate())}})
       .sort({'confirmed': -1})
       .limit(40);
-    res.json({majorCountries: majorCountries.map((country) => country.countryName.replace(/,/g, ';')), visitsCounter});
+    res.json(majorCountries.map((country) => country.countryName.replace(/,/g, ';')));
   } catch (error) {
       res.status(500).json({message: error.message})
   }
