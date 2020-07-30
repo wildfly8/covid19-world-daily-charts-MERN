@@ -11,7 +11,7 @@ const screenRows = 10
 
 const Province = () => {
   const [majorCountries] = useStateWithSessionStorage('majorCountries')
-  const [interestedCountries, setInterestedCountries] = useState([])
+  const [interestedCountries, setInterestedCountries] = useState([majorCountries.split(',')[0]])
   const [dailyProvinceStats, setDailyProvinceStats] = useState([])
   const [loading, setLoading] = useState(true)
   const [hasMore, setHasMore] = useState(false)
@@ -42,27 +42,20 @@ const Province = () => {
     (async () => {
       if(majorCountries && 'null' !== majorCountries) {
         setLoading(true)
-        let paginatedAPIResult = []
-        if(interestedCountries.length === 0) {
-          const initCountry = majorCountries.split(',')[0]
-          setInterestedCountries([initCountry])
-          paginatedAPIResult = await fetchAllDailyStatsForProvinces(initCountry, pageNumber)
-        } else {
-          paginatedAPIResult = await fetchAllDailyStatsForProvinces(interestedCountries[0], pageNumber)
-        }
+        const paginatedAPIResult = await fetchAllDailyStatsForProvinces(interestedCountries[0], pageNumber)
         setDailyProvinceStats(prevStats => [...prevStats, ...paginatedAPIResult])
         setHasMore(paginatedAPIResult.length >= screenRows)
         setLoading(false)
       }
     })();
-  }, [majorCountries, pageNumber]);
+  }, [majorCountries, interestedCountries, pageNumber]);
 
-  const handleCountryChange = async (checked, country) => {
+  const handleCountryChange = (checked, country) => {
     if(checked) {
       setInterestedCountries([country])
-      const paginatedAPIResult = await fetchAllDailyStatsForProvinces(country, 0)
-      setDailyProvinceStats(paginatedAPIResult)
-      setHasMore(paginatedAPIResult.length >= screenRows)
+      setDailyProvinceStats([])
+      setPageNumber(0)
+      setHasMore(false)
     } else {
       setInterestedCountries(interestedCountries.filter(item => country !== item))
       setDailyProvinceStats(dailyProvinceStats.filter(dailyStats => country !== dailyStats[0].countryName.replace(/,/g, ';')))

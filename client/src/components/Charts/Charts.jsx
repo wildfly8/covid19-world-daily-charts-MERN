@@ -8,8 +8,10 @@ import { formatDate, smoothTimeSeries, transformToDailyNewStats } from '../../My
 const Chart = ({timeSeries, countryPicked, rank, isProvince}) => {
 
     useEffect(() => {
-        console.log('Apply Chart side effect after DOM mount or update...');
-        return () => console.log('Clean up Chart side effect before DOM unmount...');
+        console.log(`Apply Chart side effect only once after DOM mount...`);
+        return () => {
+            console.log(`Clean up existing Chart side-effect before next effect occurs...`);
+        }
     }, []);
 
     // timeSeries.forEach(({deaths, confirmed, recovered, lastUpdate}) => {
