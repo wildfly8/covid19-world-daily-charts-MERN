@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { fetchAllDailyStatsForProvinces } from './api';
 import Charts from './components/Charts/Charts'
 import CountryCheckbox from './CountryCheckbox';
@@ -16,12 +16,9 @@ const Province = () => {
   const [loading, setLoading] = useState(true)
   const [hasMore, setHasMore] = useState(false)
   const [pageNumber, setPageNumber] = useState(0)
-
   const [visitsCounter] = useContext(MyContext);
 
-  const domInstanceWatched = useRef()
-
-  const lastChartRowRef = useCallback(node => {
+  const domInstanceWatched = useCallback(node => {
     if (loading) {
       return
     }
@@ -73,7 +70,7 @@ const Province = () => {
           <div className={styles.charts}>
               {dailyProvinceStats.map((dailyStats, i) => {
                 if (dailyProvinceStats.length === i + 1) {
-                  return <div key={i} ref={lastChartRowRef}><Charts timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName + ' ' + dailyStats[0].province : ''} rank={i + 1} isProvince={true} /></div>
+                  return <div key={i} ref={domInstanceWatched}><Charts timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName + ' ' + dailyStats[0].province : ''} rank={i + 1} isProvince={true} /></div>
                 } else {
                   return <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName + ' ' + dailyStats[0].province : ''} rank={i + 1} isProvince={true} />
                 }
