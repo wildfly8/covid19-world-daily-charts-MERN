@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef, useCallback } from 'react';
 import { fetchAllDailyStatsForProvinces } from './api';
 import Charts from './components/Charts/Charts'
 import CountryCheckbox from './CountryCheckbox';
@@ -7,55 +7,94 @@ import styles from './App.module.css';
 import useStateWithSessionStorage from './useStateWithSessionStorage';
 import { MyContext } from './MyContext';
 
+const screenRows = 10
+
 const Province = () => {
-  const [majorCountries] = useStateWithSessionStorage('majorCountries');
-  const [interested, setInterested] = useState({interestedCountries: [], dailyProvinceStats: []});
-  const {interestedCountries, dailyProvinceStats} = interested;
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [majorCountries] = useStateWithSessionStorage('majorCountries')
+  const [interestedCountries, setInterestedCountries] = useState([])
+  const [dailyProvinceStats, setDailyProvinceStats] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [hasMore, setHasMore] = useState(false)
+  const [pageNumber, setPageNumber] = useState(0)
+
   const [visitsCounter] = useContext(MyContext);
+
+  const domInstanceWatched = useRef()
+
+  const lastChartRowRef = useCallback(node => {
+    if (loading) {
+      return
+    }
+    if (domInstanceWatched.current) {
+      domInstanceWatched.current.disconnect()
+    }
+    domInstanceWatched.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        setPageNumber(prevPageNumber => prevPageNumber + 1)
+      }
+    })
+    if (node) {
+      domInstanceWatched.current.observe(node)
+    }
+  }, [loading, hasMore])
 
   useEffect(() => {
     (async () => {
       if(majorCountries && 'null' !== majorCountries) {
-        const initCoutries = majorCountries.split(',').slice(0, 10);
-        setInterested({interestedCountries: initCoutries[0], dailyProvinceStats: await fetchAllDailyStatsForProvinces(initCoutries[0])})
-        setIsLoaded(true);
+        setLoading(true)
+        let paginatedAPIResult = []
+        if(interestedCountries.length === 0) {
+          const initCountry = majorCountries.split(',')[0]
+          setInterestedCountries([initCountry])
+          paginatedAPIResult = await fetchAllDailyStatsForProvinces(initCountry, pageNumber)
+        } else {
+          paginatedAPIResult = await fetchAllDailyStatsForProvinces(interestedCountries[0], pageNumber)
+        }
+        setDailyProvinceStats(prevStats => [...prevStats, ...paginatedAPIResult])
+        setHasMore(paginatedAPIResult.length >= screenRows)
+        setLoading(false)
       }
     })();
-  }, [majorCountries]);
+  }, [majorCountries, pageNumber]);
 
   const handleCountryChange = async (checked, country) => {
     if(checked) {
-      setInterested({interestedCountries: [country], dailyProvinceStats: [...await fetchAllDailyStatsForProvinces(country)]})
+      setInterestedCountries([country])
+      const paginatedAPIResult = await fetchAllDailyStatsForProvinces(country, 0)
+      setDailyProvinceStats(paginatedAPIResult)
+      setHasMore(paginatedAPIResult.length >= screenRows)
     } else {
-      setInterested({interestedCountries: interestedCountries.filter(item => country !== item), dailyProvinceStats: dailyProvinceStats.filter(dailyStats => country !== dailyStats[0].countryName.replace(/,/g, ';'))})
+      setInterestedCountries(interestedCountries.filter(item => country !== item))
+      setDailyProvinceStats(dailyProvinceStats.filter(dailyStats => country !== dailyStats[0].countryName.replace(/,/g, ';')))
     }
   };
 
   return (
-    <div>
-      {!isLoaded ? (
+      <>
         <div className={styles.container}>
-          <h2>Loading All Province Daily Stats Charts...</h2>
-        </div>
-        ) : (
-          <div className={styles.container}>
-            <div className={styles.nav}>
-              <h3>Top 40 Countries</h3>(Sort by Confirmed Cases as of Today):
-              {majorCountries.split(',').map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCountries.includes(country)} handleCountryChange={handleCountryChange} />)}
-            </div>
-            <div className={styles.charts}>
-                {dailyProvinceStats.map((dailyStats, i) => <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName + ' ' + dailyStats[0].province : ''} rank={i + 1} isProvince={true} />)}
-            </div>
+          <div className={styles.nav}>
+            <h3>Top 40 Countries</h3>(Sort by Confirmed Cases as of Today):
+            {majorCountries.split(',').map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCountries.includes(country)} handleCountryChange={handleCountryChange} />)}
           </div>
-        )}
+          <h2 style={{color: "orange"}}>{loading && !hasMore && 'Loading All Province Daily Stats Charts......'}</h2>
+          <div className={styles.charts}>
+              {dailyProvinceStats.map((dailyStats, i) => {
+                if (dailyProvinceStats.length === i + 1) {
+                  return <div key={i} ref={lastChartRowRef}><Charts timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName + ' ' + dailyStats[0].province : ''} rank={i + 1} isProvince={true} /></div>
+                } else {
+                  return <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName + ' ' + dailyStats[0].province : ''} rank={i + 1} isProvince={true} />
+                }
+              })}
+          </div>
+        </div>
         <div className={styles.Footer}>
+          <h3 style={{color: "orange"}}>{(loading || hasMore) && 'Continue Loading All Province Daily Stats Charts......'}</h3>
           <footer>
             <p>Visitors: {visitsCounter}</p>
             Provided by Monad Wisdom Technologies, 2020. If any suggestion, please email us at: wisdomspringtech@yahoo.com
           </footer>
         </div>
-    </div>
+      </>
   );
 };
 

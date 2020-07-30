@@ -60,7 +60,7 @@ const Home = () => {
     <div>
       {!isLoaded ? (
         <div className={styles.container}>
-          <h2>Loading All Country Daily Stats Charts...</h2>
+          <h2 style={{color: "orange"}}>Loading All Country Daily Stats Charts...</h2>
         </div>
         ) : (
           <div className={styles.container}>

@@ -44,9 +44,9 @@ export const fetchAllDailyStatsForCountries = async (countryNames) => {
     }
 }
 
-export const fetchAllDailyStatsForProvinces = async (countryName) => {
+export const fetchAllDailyStatsForProvinces = async (countryName, pageNumber) => {
     try {
-        const {data} = await axios.get(`/api/daily_stats/province?countryNames=${countryName}`);  
+        const {data} = await axios.get(`/api/daily_stats/province?countryNames=${countryName}&pageNumber=${pageNumber}`);  
         return data;
     } catch (error) {
         console.log(error);

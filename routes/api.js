@@ -47,21 +47,36 @@ router.get('/daily_stats', async (req, res) => {
   }
 });
 
+let allDailyProvinceStatsAll = {};
+
 router.get('/daily_stats/province', async (req, res) => {
   //DB call
   try {
     const names = req.query.countryNames.split(',');
-    let allDailyProvinceStats = [];
-    for(const name of names) {
-      const allStatsForCountryQuery = ProvinceDailyCovidStats.find({countryName: name.replace(/;/g, ',')});
-      const allStatsForCountry = await allStatsForCountryQuery.exec();
-      const provinces = await allStatsForCountryQuery.distinct('province').exec();
-      for(const province of provinces) {
-        allDailyProvinceStats.push(allStatsForCountry.filter(doc => doc.province === province));
-      };
-      allDailyProvinceStats.sort((a, b) => b[b.length - 1].confirmed - a[a.length - 1].confirmed);
+    const pageNumber = parseInt(req.query.pageNumber);
+    if(pageNumber === 0) {
+      for(const name of names) {
+        let allDailyProvinceStats = [];
+        const allStatsForCountryQuery = ProvinceDailyCovidStats.find({countryName: name.replace(/;/g, ',')});
+        const allStatsForCountry = await allStatsForCountryQuery.exec();
+        const provinces = await allStatsForCountryQuery.distinct('province').exec();
+        for(const province of provinces) {
+          allDailyProvinceStats.push(allStatsForCountry.filter(doc => doc.province === province));
+        };
+        allDailyProvinceStats.sort((a, b) => b[b.length - 1].confirmed - a[a.length - 1].confirmed);
+        allDailyProvinceStatsAll[name] = allDailyProvinceStats
+      }
     }
-    res.json(allDailyProvinceStats);
+    let paginatedResult = []
+    const screenRows = 10
+    for(const name of names) {
+      if((pageNumber + 1) * screenRows  - 1 <= (allDailyProvinceStatsAll[name].length - 1)) {
+        paginatedResult = allDailyProvinceStatsAll[name].slice(pageNumber * screenRows, (pageNumber + 1) * screenRows)
+      } else if(pageNumber * screenRows <= (allDailyProvinceStatsAll[name].length - 1)) {
+        paginatedResult = allDailyProvinceStatsAll[name].slice(pageNumber * screenRows)
+      }
+    }
+    res.json(paginatedResult)
   } catch (error) {
       res.status(500).json({message: error.message})
   }
