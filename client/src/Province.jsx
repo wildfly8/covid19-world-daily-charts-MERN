@@ -37,7 +37,7 @@ const Province = () => {
 
   useEffect(() => {
     (async () => {
-      if(majorCountries && 'null' !== majorCountries) {
+      if(majorCountries && 'null' !== majorCountries && interestedCountries && interestedCountries[0]) {
         setLoading(true)
         const paginatedAPIResult = await fetchAllDailyStatsForProvinces(interestedCountries[0], pageNumber)
         setDailyProvinceStats(prevStats => [...prevStats, ...paginatedAPIResult])
@@ -56,6 +56,8 @@ const Province = () => {
     } else {
       setInterestedCountries(interestedCountries.filter(item => country !== item))
       setDailyProvinceStats(dailyProvinceStats.filter(dailyStats => country !== dailyStats[0].countryName.replace(/,/g, ';')))
+      setPageNumber(0)
+      setHasMore(false)
     }
   };
 
