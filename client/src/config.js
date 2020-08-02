@@ -5,9 +5,10 @@ export default {
     clientId: process.env.REACT_APP_OKTA_CLIENT_ID,
     issuer: `${process.env.REACT_APP_OKTA_ORG_URL}/oauth2/default`,
     redirectUri: `${window.location.origin}/implicit/callback`,
+    responseType: ['code'],
     scopes: ['openid', 'profile', 'email'],
     pkce: true,
-    disableHttpsCheck: true,
+    disableHttpsCheck: false,
     idps: [
       {type: 'Facebook', id: process.env.REACT_APP_IDP_ID_FB}
       ],
