@@ -29,7 +29,7 @@ const Navbar = () => {
           </Menu.Item>
           <Menu.Item as="a" header href="/province">Daily Stats by Province</Menu.Item>
           {authState.isAuthenticated && userInfo && (
-          <Menu.Item id="messages-button" as="a" href="/messages"><Icon name="mail outline" />Messages</Menu.Item>
+            <Menu.Item id="messages-button" as="a" href="/messages"><Icon name="mail outline" />Messages</Menu.Item>
           )}
           {authState.isAuthenticated && userInfo && <Menu.Item id="profile-button" position='right' as="a" href="/profile">Profile</Menu.Item>}
           {authState.isAuthenticated && userInfo && <Menu.Item position='right'>Welcome {userInfo.name}!</Menu.Item>}

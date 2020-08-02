@@ -8,7 +8,6 @@ const Profile = () => {
 
   useEffect(() => {
     if (!authState.isAuthenticated) {
-      // When user isn't authenticated, forget any user info
       setUserInfo(null);
     } else {
       authService.getUser().then((info) => {
