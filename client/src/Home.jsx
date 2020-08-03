@@ -2,7 +2,7 @@ import { useOktaAuth } from '@okta/okta-react';
 import React, { useState, useEffect, useContext } from 'react';
 import { fetchAllDailyStatsForMajorCountries, fetchAllDailyStatsForCountries, fetchDailyData } from './api';
 import Charts from './components/Charts/Charts'
-import CountryCheckbox from './CountryCheckbox';
+import CountryCheckbox from './components/CountryCheckbox';
 // @ts-ignore
 import styles from './App.module.css';
 import useStateWithSessionStorage from './useStateWithSessionStorage';

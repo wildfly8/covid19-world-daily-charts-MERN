@@ -6,7 +6,7 @@ export default {
     issuer: `${process.env.REACT_APP_OKTA_ORG_URL}/oauth2/default`,
     redirectUri: `${window.location.origin}/implicit/callback`,
     responseType: ['token', 'id_token'],
-    scopes: ['openid', 'profile', 'email'],
+    scopes: ['openid', 'profile', 'email', 'address', 'phone'],
     pkce: false,
     disableHttpsCheck: false,
     idps: [
@@ -15,6 +15,6 @@ export default {
     idpDisplay: "PRIMARY",
   },
   resourceServer: {
-    messagesUrl: `${window.location.origin}/api/messages`,
+    messagesUrl: `${window.location.origin}/api/chat`,
   },
 };

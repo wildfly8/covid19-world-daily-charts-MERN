@@ -4,9 +4,9 @@ import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
 import { Container } from 'semantic-ui-react';
 import config from './config';
 import Home from './Home';
-import CustomLoginComponent from './Login';
+import CustomLoginComponent from './components/Login';
 import Province from './Province';
-import Messages from './Messages';
+import Chat from './Chat';
 import Navbar from './Navbar';
 import Profile from './Profile';
 import { MyContext } from './MyContext';
@@ -32,7 +32,7 @@ const HasAccessToRouter = () => {
         <Route path="/province" component={Province} />
         <Route path="/implicit/callback" component={LoginCallback} />
         <Route path="/login" component={CustomLoginComponent} />
-        <SecureRoute path="/messages" component={Messages} />
+        <SecureRoute path="/chat" component={Chat} />
         <SecureRoute path="/profile" component={Profile} />
       </Container>
     </Security>

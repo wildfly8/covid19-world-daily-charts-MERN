@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { fetchAllDailyStatsForProvinces } from './api';
 import Charts from './components/Charts/Charts'
-import CountryCheckbox from './CountryCheckbox';
+import CountryCheckbox from './components/CountryCheckbox';
 // @ts-ignore
 import styles from './App.module.css';
 import useStateWithSessionStorage from './useStateWithSessionStorage';

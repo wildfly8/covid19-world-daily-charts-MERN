@@ -38,7 +38,7 @@ const authenticationRequired = (req, res, next) => {
     });
 }
 
-router.get('/messages', authenticationRequired, (req, res) => {
+router.get('/chat', authenticationRequired, (req, res) => {
   res.json({
     messages: [
       {
