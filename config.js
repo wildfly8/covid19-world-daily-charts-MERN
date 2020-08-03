@@ -9,7 +9,7 @@ module.exports = {
       clientId: SPA_CLIENT_ID,
       issuer: AUTH_ISSUER,
       testing: {
-        disableHttpsCheck: true
+        disableHttpsCheck: false
       }
     },
     assertClaims: {

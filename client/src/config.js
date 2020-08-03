@@ -8,7 +8,7 @@ export default {
     responseType: ['token', 'id_token'],
     scopes: ['openid', 'profile', 'email'],
     pkce: false,
-    disableHttpsCheck: true,
+    disableHttpsCheck: false,
     idps: [
       {type: 'Facebook', id: process.env.REACT_APP_IDP_ID_FB}
       ],
