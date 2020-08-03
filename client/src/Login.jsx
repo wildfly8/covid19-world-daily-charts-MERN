@@ -6,7 +6,7 @@ import config from './config';
 
 const Login = () => {
   useEffect(() => {
-    const { pkce, issuer, clientId, redirectUri, responseType, scopes, idps, idpDisplay } = config.oidc;
+    const { issuer, clientId, redirectUri, responseType, scopes, idps, idpDisplay } = config.oidc;
     const widget = new OktaSignIn({
       /**
        * Note: when using the Sign-In Widget for an OIDC flow, it still
@@ -14,9 +14,10 @@ const Login = () => {
        * we derive it from the given issuer for convenience.
        */
       baseUrl: issuer.split('/oauth2')[0],
-      clientId,
-      redirectUri,
-      responseType,
+      clientId: clientId,
+      redirectUri: redirectUri,
+      getAccessToken: true,
+      getIdToken: true,
       logo: '/react.svg',
       i18n: {
         'en': {
@@ -36,14 +37,16 @@ const Login = () => {
         registration: true,
         rememberMe: true,
       },
-      idps,
-      idpDisplay,
+      idps: idps,
+      idpDisplay: idpDisplay,
+      scopes: scopes,
       authParams: {
-        pkce,
         issuer,
+        responseType: responseType,
         display: 'page',
-        responseMode: pkce ? 'query' : 'fragment',
-        scopes,
+        // scopes,
+        // pkce: pkce,
+        // responseMode: pkce ? 'query' : 'fragment',
       },
     });
 

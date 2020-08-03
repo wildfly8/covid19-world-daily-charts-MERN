@@ -48,7 +48,7 @@ const Profile = () => {
               return (
                 <tr key={claimName}>
                   <td>{claimName}</td>
-                  <td id={claimId}>{claimValue}</td>
+                  <td id={claimId}>{JSON.stringify(claimValue)}</td>
                 </tr>
               );
             })}
