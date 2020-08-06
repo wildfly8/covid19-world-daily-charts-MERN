@@ -39,15 +39,25 @@ const authenticationRequired = (req, res, next) => {
 }
 
 router.get('/chat', authenticationRequired, (req, res) => {
+  const userSub = req.query.user;
   res.json({
-    messages: [
+    //temp, need to wait for Cassandra store pipeline finished.
+    rooms: [
       {
-        date:  new Date(),
-        text: 'I am a robot.'
+        roomName: 'DM-Shin Xu-Lizzy',
+        members: ['Shin Xu', 'Lizzy'],
       },
       {
-        date:  new Date(new Date().getTime() - 1000 * 60 * 60),
-        text: 'Hello, world!'
+        roomName: 'DM-Test Account-Shin Xu',
+        members: ['Test Account', 'Shin Xu'],
+      },
+      {
+        roomName: 'DM-Test Account-Lizzy',
+        members: ['Test Account', 'Lizzy'],
+      },
+      {
+        roomName: 'Channel-Test',
+        members: ['Test Account', 'Shin Xu', 'Lizzy'],
       }
     ]
   });

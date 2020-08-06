@@ -1,0 +1,22 @@
+.form {
+  display: flex;
+  align-items: center;
+  margin-left: 1%;
+}
+
+.input {
+  padding: 1%;
+  width: 90%;
+  font-size: 1.2em;
+}
+
+.sendButton {
+  color: #fff !important;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: #350d36;
+  padding: 20px;
+  display: inline-block;
+  border: none;
+  width: 10%;
+}

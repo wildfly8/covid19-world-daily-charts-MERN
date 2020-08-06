@@ -16,7 +16,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-//app.use(cors());
+app.use(cors());
 //app.use('/', indexRouter);
 //app.use('/users', usersRouter);
 app.use('/api', apiRouter);
@@ -49,7 +49,8 @@ mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true,
   useCreateIndex: true,
   useFindAndModify: false,
-}).then(() =>  console.log('MongoDB covid19 connection successful.'))
+})
+.then(() =>  console.log('MongoDB covid19 connection successful.'))
 .catch((err) => console.error(err))
 
 const db = mongoose.connection

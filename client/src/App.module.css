@@ -6,8 +6,7 @@ body {
     display: flex;
     flex-direction: row;
     border-top: 3px double #bbb;
-    position: relative; 
-    margin-top: 4em;
+    margin-top: 3em; 
 }
 
 .nav {
@@ -18,11 +17,16 @@ body {
     justify-content: flex-start;
     padding-left: 0.5em;
     padding-right: 0.5em;
+    min-width: 15%;
+    flex: 0 0 0;
 }
 
 .charts {
-    flex: 1 1 auto;
+    flex: 1 0 auto;
     flex-wrap: nowrap;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .Footer {

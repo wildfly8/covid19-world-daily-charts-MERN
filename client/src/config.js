@@ -15,6 +15,6 @@ export default {
     idpDisplay: "PRIMARY",
   },
   resourceServer: {
-    messagesUrl: `${window.location.origin}/api/chat`,
+    roomsUrl: `${process.env.REACT_APP_EXPRESS_NODE_SERVER_ENDPOINT}/api/chat`,
   },
 };
