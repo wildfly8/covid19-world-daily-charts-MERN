@@ -1,11 +1,11 @@
 const users = [];
 
 const addUser = ({ id, name, room }) => {
-  name = name.trim().toLowerCase();
-  room = room.trim().toLowerCase();
+  name = name.trim();
+  room = room.trim();
   const existingUser = users.find((user) => user.room === room && user.name === name);
   if(!name || !room) return { error: 'Username and room are required.' };
-  if(existingUser) return { error: 'Username is taken.' };
+  if(existingUser) return { error: `Username "${name}" with the room "${room}" and id "${id}" has already been created.` };
   const user = { id, name, room };
   users.push(user);
   return { user };
@@ -20,4 +20,9 @@ const getUser = (id) => users.find((user) => user.id === id);
 
 const getUsersInRoom = (room) => users.filter((user) => user.room === room);
 
-module.exports = { addUser, removeUser, getUser, getUsersInRoom };
+const queryDBForRoom = (room) => {
+  //temp...
+  return null;
+}
+
+module.exports = { addUser, removeUser, getUser, getUsersInRoom, queryDBForRoom };

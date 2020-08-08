@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import onlineIcon from '../../icons/onlineIcon.png';
 import './TextContainer.css';
 import Button from '@material-ui/core/Button';
@@ -6,52 +6,29 @@ import DMDialogue from '../DMDialogue';
 import { Icon } from 'semantic-ui-react';
 import { makeStyles } from '@material-ui/core';
 
-//temp
-const allUsers = ['Shin Xu', 'Test Account', 'Test2 Account', 'Lizzy', 'Test3 Account', 'lil grant'];
-
 const useStyles = makeStyles({
   button: {
     textTransform: "none"
   }
 });
 
-const TextContainer = ({ userInfo, initCounterparties }) => {
+const TextContainer = ({ userInfo, allUsers, counterparties, selectedCounterparty, setSelectedCounterparty, handlePopupSelection }) => {
 
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
-  const [counterparties, setCounterparties] = useState(initCounterparties);
-  const [selectedCounterparty, setSelectedCounterparty] = useState(initCounterparties);
+  const [popupOpen, setPopupOpen] = useState(false);
 
-  useEffect(() => {
-    if(initCounterparties && initCounterparties.length > 0) {
-      setCounterparties(initCounterparties);
-      setSelectedCounterparty(initCounterparties[0]);
-    }
-  }, [initCounterparties]);
-
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handlePopupOpen = () => {
+    setPopupOpen(true);
   };
 
-  const handleClose = (value) => {
-    setOpen(false);
-    if(value) {
-      setCounterparties(prevCouterparties => {
-        let temp;
-        if (Array.isArray(value)) {
-          temp = [...new Set([...prevCouterparties, ...value])]
-        } else {
-          temp = [...new Set([...prevCouterparties, value])]
-          setSelectedCounterparty(value);
-        }
-        return temp
-      });
-    }
+  const handlePopupClose = (value) => {
+    setPopupOpen(false);
+    handlePopupSelection(value);
   };
 
   const handleCounterpartyClicked = (e) => {
     setSelectedCounterparty(e.target.textContent);
-  };
+  }
 
   return (
     <div>
@@ -61,12 +38,12 @@ const TextContainer = ({ userInfo, initCounterparties }) => {
       <br />
       <div>
         <h3>Direct Messages
-          <Button onClick={handleClickOpen}>
+          <Button onClick={handlePopupOpen}>
             <Icon name="plus" />
           </Button>
         </h3>
         <div>
-          <DMDialogue allUsers={allUsers.filter(u => userInfo && u !== userInfo.name)} open={open} onClose={handleClose} />
+          <DMDialogue allUsers={allUsers.filter(u => userInfo && u !== userInfo.name)} open={popupOpen} onClose={handlePopupClose} />
           <h4>
             {counterparties.map((counterparty) => (
               <div key={counterparty}>
