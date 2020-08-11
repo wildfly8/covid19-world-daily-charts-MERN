@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import onlineIcon from '../../icons/onlineIcon.png';
+import closeIcon from '../../icons/closeIcon.png';
 import './TextContainer.css';
 import Button from '@material-ui/core/Button';
 import DMDialogue from '../DMDialogue';
@@ -12,7 +13,7 @@ const useStyles = makeStyles({
   }
 });
 
-const TextContainer = ({ userInfo, allUsers, counterparties, selectedCounterparty, setSelectedCounterparty, handlePopupSelection }) => {
+const TextContainer = ({ userInfo, allAppUsers, counterparties, selectedCounterparty, setSelectedCounterparty, handlePopupSelection }) => {
 
   const classes = useStyles();
   const [popupOpen, setPopupOpen] = useState(false);
@@ -43,12 +44,12 @@ const TextContainer = ({ userInfo, allUsers, counterparties, selectedCounterpart
           </Button>
         </h3>
         <div>
-          <DMDialogue allUsers={allUsers.filter(u => userInfo && u !== userInfo.name)} open={popupOpen} onClose={handlePopupClose} />
+          <DMDialogue allUsers={allAppUsers.filter(u => userInfo && u !== userInfo.name)} open={popupOpen} onClose={handlePopupClose} />
           <h4>
-            {counterparties.map((counterparty) => (
-              <div key={counterparty}>
-                <img alt="Online Icon" src={onlineIcon} style={{ marginRight: "5px" }} />
-                <span style={counterparty === selectedCounterparty? { marginRight: "5px", backgroundColor: "orange" } : { marginRight: "5px" }} ><Button className={classes.button} onClick={handleCounterpartyClicked}>{counterparty}</Button></span>
+            {counterparties.map((counterparty, i) => (
+              <div key={i}>
+                <img alt="Online Icon" src={counterparty.status? onlineIcon : closeIcon} style={{ marginRight: "5px" }} />
+                <span style={counterparty.name === selectedCounterparty? { marginRight: "5px", backgroundColor: "orange" } : { marginRight: "5px" }} ><Button className={classes.button} onClick={handleCounterpartyClicked}>{counterparty.name}</Button></span>
               </div>
             ))}
           </h4>

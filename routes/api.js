@@ -6,6 +6,9 @@ const ProvinceDailyCovidStats = require('../models/ProvinceDailyCovidStats');
 const siteViews = require('../models/visits');
 const SiteViewsUp = require('../site_analysis/visitsUp');
 const sampleConfig = require('../config.js');
+const axios = require("axios");
+const { response } = require('express');
+
 
 const oktaJwtVerifier = new OktaJwtVerifier({
   clientId: sampleConfig.resourceServer.oidc.clientId,
@@ -38,26 +41,76 @@ const authenticationRequired = (req, res, next) => {
     });
 }
 
-router.get('/chat', authenticationRequired, (req, res) => {
+const getAllAppUsers = async () => {
+  try {
+    const { data } = await axios.get(`https://${process.env.OKTA_DOMAIN}/api/v1/apps/${process.env.SPA_CLIENT_ID}/users`, {
+      headers: {
+        Authorization: `SSWS ${process.env.OKTA_API_TOKEN}`,
+      }
+     });
+    return data.map((user) => user.profile.name);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+router.get('/checkUserLoginStatus', async (req, res) => {
+  const name = req.query.name;
+  let lastLoginTime = null;
+  let lastLogoutTime = null;
+  try {
+    const responseStart = await axios.get(`https://${process.env.OKTA_DOMAIN}/api/v1/logs?filter=eventType eq "user.session.start" and outcome.result eq "SUCCESS" and actor.displayName eq "${name}"&until=${new Date().toISOString()}&limit=1&sortOrder=DESCENDING`, {
+      headers: {
+        Authorization: `SSWS ${process.env.OKTA_API_TOKEN}`,
+      }
+    });
+    if(responseStart && responseStart.data && responseStart.data.length > 0) {
+      lastLoginTime = responseStart.data[0].published;
+    }
+    console.log(name + ' lastLoginTime=' + lastLoginTime)
+    const responseEnd = await axios.get(`https://${process.env.OKTA_DOMAIN}/api/v1/logs?filter=eventType eq "user.session.end" and outcome.result eq "SUCCESS" and actor.displayName eq "${name}"&until=${new Date().toISOString()}&limit=1&sortOrder=DESCENDING`, {
+      headers: {
+        Authorization: `SSWS ${process.env.OKTA_API_TOKEN}`,
+      }
+    });
+    if(responseEnd && responseEnd.data && responseEnd.data.length > 0) {
+      lastLogoutTime = responseEnd.data[0].published;
+    }
+    console.log(name + ' lastLogoutTime=' + lastLogoutTime)
+  } catch (error) {
+    console.log(error);
+  }
+  if(lastLoginTime && lastLogoutTime && new Date(lastLoginTime) > new Date(lastLogoutTime)) {
+    res.json(true)
+  } else if(lastLoginTime && !lastLogoutTime) {
+    res.json(true)
+  } else {
+    res.json(false)
+  }
+});
+
+router.get('/chat', authenticationRequired, async (req, res) => {
   const userSub = req.query.user;
   res.json({
-    //temp, need to wait for Cassandra store pipeline finished.
+    //list all active users of the app
+    allAppUsers: await getAllAppUsers(),
+    //temp, need to wait for Cassandra pipeline finished to find all saved rooms for a given user.
     rooms: [
       {
-        roomName: 'DM-Shin Xu-Lizzy',
-        members: ['Shin Xu', 'Lizzy'],
+        roomName: 'DM-Shin Xu-Lizzy Xu',
+        members: ['Shin Xu', 'Lizzy Xu'],
       },
       {
         roomName: 'DM-Test Account-Shin Xu',
         members: ['Test Account', 'Shin Xu'],
       },
       {
-        roomName: 'DM-Test Account-Lizzy',
-        members: ['Test Account', 'Lizzy'],
+        roomName: 'DM-Test Account-Lizzy Xu',
+        members: ['Test Account', 'Lizzy Xu'],
       },
       {
         roomName: 'Channel-Test',
-        members: ['Test Account', 'Shin Xu', 'Lizzy'],
+        members: ['Test Account', 'Shin Xu', 'Lizzy Xu'],
       }
     ]
   });
