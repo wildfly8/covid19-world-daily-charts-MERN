@@ -1,88 +1,69 @@
-import { useOktaAuth } from '@okta/okta-react';
-import React, { useState, useEffect, useContext } from 'react';
-import { fetchAllDailyStatsForMajorCountries, fetchAllDailyStatsForCountries, fetchDailyData } from './api';
-import Charts from './components/Charts/Charts'
-import CountryCheckbox from './components/CountryCheckbox';
+import React from 'react'
 // @ts-ignore
-import styles from './App.module.css';
-import useStateWithSessionStorage from './useStateWithSessionStorage';
-import { MyContext } from './MyContext';
+import styles from './App.module.css'
 
-let countRenders = 0;
 
 const Home = () => {
-  const { authState, authService } = useOktaAuth();
-  const [userInfo, setUserInfo] = useState(null);
-  console.log('countRenders=' + (++countRenders) + ' user=' + (!authState.isAuthenticated || !userInfo? null : userInfo.name) )
-  const [majorCountries, setMajorCountries] = useStateWithSessionStorage('majorCountries');
-  const [interested, setInterested] = React.useState({interestedCountries: [], dailyStatsForCountries: []});
-  const {interestedCountries, dailyStatsForCountries} = interested;
-  const [dailyGlobalStats, setDailyGlobalStats] = React.useState([]);
-  const [isLoaded, setIsLoaded] = React.useState(false);
-  const [visitsCounter] = useContext(MyContext);
-
-  useEffect(() => {
-    if (!authState.isAuthenticated) {
-      setUserInfo(null);
-    } else {
-      authService.getUser().then((info) => {
-        setUserInfo(info);
-      });
-    }
-  }, [authState, authService]); // Update if authState changes
-
-  useEffect(() => {
-    (async () => {
-      const majorCountries = await fetchAllDailyStatsForMajorCountries();
-      setMajorCountries(majorCountries);
-      const initCoutries = majorCountries.slice(0, 10);
-      setInterested({interestedCountries: initCoutries, dailyStatsForCountries: await fetchAllDailyStatsForCountries(initCoutries)})
-      setDailyGlobalStats(await fetchDailyData());
-      setIsLoaded(true);
-    })();
-  }, [setMajorCountries]);
-
-  const handleCountryChange = async (checked, country) => {
-    if(checked) {
-      setInterested({interestedCountries: [...interestedCountries, country], dailyStatsForCountries: [...dailyStatsForCountries, ...await fetchAllDailyStatsForCountries(country)]})
-    } else {
-      setInterested({interestedCountries: interestedCountries.filter(item => country !== item), dailyStatsForCountries: dailyStatsForCountries.filter(dailyStats => country !== dailyStats[0].countryName.replace(/,/g, ';'))})
-    }
-  };
-
-  if (authState.isPending) {
-    return (
-      <div>Loading...</div>
-    );
-  }
-
   return (
-    <div>
-      {!isLoaded ? (
-        <div className={styles.container}>
-          <h2 style={{color: "orange"}}>Loading All Country Daily Stats Charts...</h2>
-        </div>
-        ) : (
-          <div className={styles.container}>
-            <div className={styles.nav}>
-              <h3>Top 40 Countries</h3>(Sort by Confirmed Cases as of Today):
-              {majorCountries.map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCountries.includes(country)} handleCountryChange={handleCountryChange} />)}
-            </div>
-            <div className={styles.charts}>
-                <Charts timeSeries={dailyGlobalStats} countryPicked='Global' rank='' isProvince={false} />
-                {dailyStatsForCountries.map((dailyStats, i) => <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName : ''} rank={majorCountries.indexOf(dailyStats[0].countryName) + 1} isProvince={false} />)}
-                {/* <CountryPicker handleCountryChange={handleCountryChange} />
-                <Cards snapshotStats={snapshotStats} /> */}
-            </div>
-          </div>
-        )}
-        <div className={styles.Footer}>
-          <footer>
-            <p>Visitors: {visitsCounter}</p>
-            Provided by Monad Wisdom Technologies, 2020. If any suggestion, please email us at: wisdomspringtech@yahoo.com
-          </footer>
-        </div>
+    <div className={styles.grid_container}>
+      <div className={styles.grid_item_header}></div>
+      <div className={styles.grid_item_nav}><h4>Software Development Learning through examples:</h4> 1) MERN stack with React, Okta 
+        <br/><br/> 2) MEAN stack with Angular <br/><br/> 3) Spring Boot with Java <br/><br/> 4) Kafka/Cassandra/Spark/Redis Pipeline
+        <br/><h4>Academic Learning:</h4> 1) Math <br/><br/>2) Physics <br/><br/>3) Computer Science <br/><br/>3) Economics <br/><br/>4) Statistics
+      </div>
+      <div className={styles.grid_item_content}>	  	
+			  <h4>About US:</h4>
+		    <p>
+            If you're a delicate observer of our daily life encounters, you'll find people are yearning for aquiring new knowledge and
+            inspiration every single day, if not every single minute. Even though many people claim they're loving to teach
+            and share their ideas to others, the truth is, ultimately they hope to learn some new valuable things from their
+            actve interaction with others. No one enjoys repetitive work or life as another day passes without any new findings. This
+            new knowledge really keeps people feel empowered. Thus this website portal is dedicated to people who realize 
+            they'd better explore and learn new knowledge and skills in the area of Education &amp; Software Development. 
+        </p>
+        <p>
+            However, any exploration and learning journey is not easy and need to overcome lots of this and that unfamiliar
+            new challenges. Thus this website portal is focused to help dedicated people to overcome ALL the possible impediments
+            on their road to the destination of truly aquiring new knowledge and inspiration. For every skillset a user choose, 
+            we'll lead the user by several concrete examples or small projects. It's the shortest and fastest route to the destination. Just
+            give it a try, right now, today...
+        </p>
+        <nav>
+          <h4>Services provided:</h4>
+			    <ul>
+				    <li>			
+					    <strong>
+                Valuable educational content through K-12, college, and graduate levels.
+              </strong>
+				    </li>
+            <br/>
+            <li>
+              <strong>
+					      Individual-tailored education roadmap strategy discussion and implementation.
+              </strong>
+				    </li>
+            <br/>
+				    <li >
+              <strong>
+					      Software development projects from scratch, such as interactive website design using the most popular frameworks 
+                and programming languages, modern big data batch analytics and stream processing pipelines, etc.
+              </strong>
+				    </li>
+            <br/>
+			    </ul>
+		    </nav>
+        <p>
+			    <strong>Contact:</strong>
+		    </p>
+		    <address>
+    		  <a href="mailto:#">WisdomSpringTech@yahoo.com</a>
+		    </address>	
+      </div>
+      <div className={styles.grid_item_infobar}></div>
+      <div className={styles.grid_item_footer}>
+        <small>Copyright &copy; Monad Wisdom Technologies. All rights reserved.</small>
+      </div>
     </div>
-  );
-};
-export default Home;
+  )
+}
+export default Home

@@ -5,9 +5,10 @@ import { Container } from 'semantic-ui-react';
 import config from './config';
 import Home from './Home';
 import CustomLoginComponent from './components/Login';
+import Country from './Country';
 import Province from './Province';
 import Chat from './Chat';
-import Navbar from './Navbar';
+import HeaderBar from './HeaderBar';
 import Profile from './Profile';
 import { MyContext } from './MyContext';
 import { fetchVisitsCounter } from './api';
@@ -27,8 +28,9 @@ const HasAccessToRouter = () => {
       onAuthRequired={customAuthHandler}
     >
       <Container fluid>
-        <Navbar />
+        <HeaderBar />
         <Route path="/" exact component={Home} />
+        <Route path="/country" component={Country} />
         <Route path="/province" component={Province} />
         <Route path="/implicit/callback" component={LoginCallback} />
         <Route path="/login" component={CustomLoginComponent} />

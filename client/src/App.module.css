@@ -6,7 +6,49 @@ body {
     display: flex;
     flex-direction: row;
     border-top: 3px double #bbb;
-    margin-top: 3em; 
+    margin-top: 3em;
+    grid-gap: 20px;
+}
+
+.grid_container {
+    display: grid;
+    grid-template-columns: 20% 1fr;
+    grid-template-rows: 2em auto 2em 3em;
+    /* grid-auto-rows: minmax(20px, auto); */
+    height: 100vh;
+}
+
+.grid_item_header {
+    grid-column: span 2;
+    grid-row: span 1;
+}
+
+.grid_item_nav {
+    grid-column: span 1;
+    grid-row: span 3;
+    border-right: 3px double #bbb;
+    padding: 2em;
+    word-wrap: break-word;
+    /* word-break: break-all; */
+}
+
+.grid_item_content {
+    grid-column: span 1;
+    grid-row: span 1;
+    padding: 2em;
+}
+
+.grid_item_infobar {
+    grid-column: span 1;
+    grid-row: span 1;
+    padding-left: 2em;
+}
+
+.grid_item_footer {
+    grid-column: span 1;
+    grid-row: span 1;
+    padding: 1em;
+    text-align: center;
 }
 
 .nav {

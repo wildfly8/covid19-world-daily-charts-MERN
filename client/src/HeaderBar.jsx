@@ -2,7 +2,8 @@ import { useOktaAuth } from '@okta/okta-react';
 import React, { useState, useEffect } from 'react';
 import { Icon, Menu } from 'semantic-ui-react';
 
-const Navbar = () => {
+
+const HeaderBar = () => {
   const { authState, authService } = useOktaAuth();
   const [userInfo, setUserInfo] = useState(null);
 
@@ -24,8 +25,9 @@ const Navbar = () => {
     <div>
       <Menu fixed="top" inverted>
           <Menu.Item><Icon name="sidebar" /></Menu.Item>
-          <Menu.Item as="a" header href="/"><Icon name="chart line" />COVID-19 Global Daily Stats by Country</Menu.Item>
-          <Menu.Item as="a" header href="/province"><Icon name="chart bar" />Daily Stats by Province</Menu.Item>
+          <Menu.Item as="a" header href="/"><Icon name="home" />Home</Menu.Item>
+          <Menu.Item as="a" header href="/country"><Icon name="chart line" />Covid-19 Daily Stats by Country</Menu.Item>
+          <Menu.Item as="a" header href="/province"><Icon name="chart bar" />Covid-19 Daily Stats by Province</Menu.Item>
           {authState.isAuthenticated && userInfo && (<Menu.Item as="a" href="/chat"><Icon name="rocketchat" />Chat</Menu.Item>)}
           {authState.isAuthenticated && userInfo && <Menu.Item position='right'>Welcome {userInfo.name}!</Menu.Item>}
           {authState.isAuthenticated && userInfo && <Menu.Item position='right' as="a" href="/profile"><Icon name="user outline" />Profile</Menu.Item>}
@@ -36,4 +38,4 @@ const Navbar = () => {
     </div>
   );
 };
-export default Navbar;
+export default HeaderBar;
