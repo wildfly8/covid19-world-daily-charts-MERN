@@ -2,13 +2,15 @@ import { useOktaAuth } from '@okta/okta-react'
 import React, { useState, useEffect } from 'react'
 import config from './config'
 import { fetchUserLoginStatus } from './api';
-// @ts-ignore
-import styles from './App.module.css'
 import io from "socket.io-client"
 import TextContainer from './components/TextContainer/TextContainer'
 import InfoBar from './components/InfoBar/InfoBar'
 import Messages from './components/Messages/Messages'
 import Input from './components/Input/Input'
+import HeaderBar from './HeaderBar';
+// @ts-ignore
+import styles from './App.module.css'
+
 
 //temp
 const possibleErrors = ['Your resource server example is using the same Okta authorization server (issuer) that you have configured this React application to use.']
@@ -132,18 +134,19 @@ const Chat = () => {
   }
 
   return (
-    <div>
-      {savedRoomsFetchFailed && <div style={{ color: "orange", marginTop: "3em" }}>Failed to fetch saved rooms!! Please verify: ${possibleErrors}</div>}
-      <div className={styles.container}>
-        <div className={styles.nav}>
-          <TextContainer userInfo={userInfo} allAppUsers={allAppUsers} counterparties={counterparties} selectedCounterparty={selectedCounterparty} setSelectedCounterparty={setSelectedCounterparty} handlePopupSelection={handlePopupSelection} />
-        </div>
-        <div className={styles.charts}>
-          <InfoBar room={activeRoom} />
-          <Messages messages={messages} name={userInfo ? userInfo.name : ''} />
-          <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
-        </div>
-      </div>
+    <div className={styles.grid_container}>
+      <header className={styles.grid_item_header}><HeaderBar /></header>
+      <nav className={styles.grid_item_nav} style={{color: "white", backgroundColor: "#350d36"}}>
+        <TextContainer userInfo={userInfo} allAppUsers={allAppUsers} counterparties={counterparties} selectedCounterparty={selectedCounterparty} setSelectedCounterparty={setSelectedCounterparty} handlePopupSelection={handlePopupSelection} />
+      </nav>
+      <main className={styles.grid_item_content}>
+        {savedRoomsFetchFailed && <h2 style={{color: "orange"}}>Failed to fetch saved rooms!! Please verify: ${possibleErrors}</h2>}
+        <InfoBar room={activeRoom} />
+        <Messages messages={messages} name={userInfo ? userInfo.name : ''} />
+        <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
+      </main>
+      <output className={styles.grid_item_infobar}>info</output>
+      <footer className={styles.grid_item_footer}><small>Copyright &copy; Monad Wisdom Technologies. All rights reserved. If any suggestion, please email us at: wisdomspringtech@yahoo.com</small></footer>
     </div>
   )
 }

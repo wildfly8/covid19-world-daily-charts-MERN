@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { fetchAllDailyStatsForProvinces } from './api';
 import Charts from './components/Charts/Charts'
 import CountryCheckbox from './components/CountryCheckbox';
 // @ts-ignore
 import styles from './App.module.css';
 import useStateWithSessionStorage from './useStateWithSessionStorage';
-import { MyContext } from './MyContext';
+import HeaderBar from './HeaderBar';
+
 
 const screenRows = 10
 
@@ -16,7 +17,6 @@ const Province = () => {
   const [loading, setLoading] = useState(true)
   const [hasMore, setHasMore] = useState(false)
   const [pageNumber, setPageNumber] = useState(0)
-  const [visitsCounter] = useContext(MyContext);
 
   const domInstanceWatched = useCallback(node => {
     if (loading) {
@@ -62,31 +62,25 @@ const Province = () => {
   };
 
   return (
-      <>
-        <div className={styles.container}>
-          <div className={styles.nav}>
-            <h3>Top 40 Countries</h3>(Sort by Confirmed Cases as of Today):
-            {majorCountries.split(',').map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCountries.includes(country)} handleCountryChange={handleCountryChange} />)}
-          </div>
+      <div className={styles.grid_container}>
+        <header className={styles.grid_item_header}><HeaderBar /></header>
+        <nav className={styles.grid_item_nav}>
+          <h3>Top 40 Countries</h3>(Sort by Confirmed Cases as of Today):
+          {majorCountries.split(',').map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCountries.includes(country)} handleCountryChange={handleCountryChange} />)}
+        </nav>
+        <main className={styles.grid_item_content}>
+          {dailyProvinceStats.map((dailyStats, i) => {
+            if (dailyProvinceStats.length === i + 1) {
+              return <div key={i} ref={domInstanceWatched}><Charts timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName + ' ' + dailyStats[0].province : ''} rank={i + 1} isProvince={true} /></div>
+            } else {
+              return <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName + ' ' + dailyStats[0].province : ''} rank={i + 1} isProvince={true} />
+            }
+          })}
           <h2 style={{color: "orange"}}>{loading && !hasMore && 'Loading All Province Daily Stats Charts......'}</h2>
-          <div className={styles.charts}>
-              {dailyProvinceStats.map((dailyStats, i) => {
-                if (dailyProvinceStats.length === i + 1) {
-                  return <div key={i} ref={domInstanceWatched}><Charts timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName + ' ' + dailyStats[0].province : ''} rank={i + 1} isProvince={true} /></div>
-                } else {
-                  return <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName + ' ' + dailyStats[0].province : ''} rank={i + 1} isProvince={true} />
-                }
-              })}
-          </div>
-        </div>
-        <div className={styles.Footer}>
-          <h3 style={{color: "orange"}}>{(loading || hasMore) && 'Continue Loading All Province Daily Stats Charts......'}</h3>
-          <footer>
-            <p>Visitors: {visitsCounter}</p>
-            Provided by Monad Wisdom Technologies, 2020. If any suggestion, please email us at: wisdomspringtech@yahoo.com
-          </footer>
-        </div>
-      </>
+        </main>
+        <output className={styles.grid_item_infobar}><h2 style={{color: "orange"}}>{hasMore && 'Continue Loading All Province Daily Stats Charts......'}</h2></output>
+        <footer className={styles.grid_item_footer}><small>Copyright &copy; Monad Wisdom Technologies. All rights reserved. If any suggestion, please email us at: wisdomspringtech@yahoo.com</small></footer>
+      </div>
   );
 };
 

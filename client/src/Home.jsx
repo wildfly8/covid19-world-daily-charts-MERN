@@ -1,4 +1,5 @@
 import React from 'react'
+import HeaderBar from './HeaderBar'
 // @ts-ignore
 import styles from './App.module.css'
 
@@ -6,13 +7,14 @@ import styles from './App.module.css'
 const Home = () => {
   return (
     <div className={styles.grid_container}>
-      <div className={styles.grid_item_header}></div>
-      <div className={styles.grid_item_nav}><h4>Software Development Learning through examples:</h4> 1) MERN stack with React, Okta 
+      <header className={styles.grid_item_header}><HeaderBar /></header>
+      <nav className={styles.grid_item_nav}><h4>Software Development Learning through examples:</h4> 1) MERN stack with React, Okta 
         <br/><br/> 2) MEAN stack with Angular <br/><br/> 3) Spring Boot with Java <br/><br/> 4) Kafka/Cassandra/Spark/Redis Pipeline
         <br/><h4>Academic Learning:</h4> 1) Math <br/><br/>2) Physics <br/><br/>3) Computer Science <br/><br/>3) Economics <br/><br/>4) Statistics
-      </div>
-      <div className={styles.grid_item_content}>	  	
-			  <h4>About US:</h4>
+      </nav>
+      <main className={styles.grid_item_content}>
+        <div style={{ paddingLeft: "2em",  paddingRight: "2em"}}>
+        <h4>About US:</h4>
 		    <p>
             If you're a delicate observer of our daily life encounters, you'll find people are yearning for aquiring new knowledge and
             inspiration every single day, if not every single minute. Even though many people claim they're loving to teach
@@ -57,12 +59,11 @@ const Home = () => {
 		    </p>
 		    <address>
     		  <a href="mailto:#">WisdomSpringTech@yahoo.com</a>
-		    </address>	
-      </div>
-      <div className={styles.grid_item_infobar}></div>
-      <div className={styles.grid_item_footer}>
-        <small>Copyright &copy; Monad Wisdom Technologies. All rights reserved.</small>
-      </div>
+		    </address>
+        </div>	
+      </main>
+      <output className={styles.grid_item_infobar}></output>
+      <footer className={styles.grid_item_footer}><small>Copyright &copy; Monad Wisdom Technologies. All rights reserved. If any suggestion, please email us at: wisdomspringtech@yahoo.com</small></footer> 
     </div>
   )
 }

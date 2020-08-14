@@ -7,6 +7,7 @@ import CountryCheckbox from './components/CountryCheckbox';
 import styles from './App.module.css';
 import useStateWithSessionStorage from './useStateWithSessionStorage';
 import { MyContext } from './MyContext';
+import HeaderBar from './HeaderBar';
 
 let countRenders = 0;
 
@@ -57,31 +58,24 @@ const Country = () => {
   }
 
   return (
-    <div>
+    <div className={styles.grid_container}>
+      <header className={styles.grid_item_header}><HeaderBar /></header>
+      <nav className={styles.grid_item_nav}>
+        <h3>Top 40 Countries</h3>(Sort by Confirmed Cases as of Today):
+        {Array.isArray(majorCountries) && majorCountries.length > 0 && majorCountries.map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCountries.includes(country)} handleCountryChange={handleCountryChange} />)}
+      </nav>
       {!isLoaded ? (
-        <div className={styles.container}>
-          <h2 style={{color: "orange"}}>Loading All Country Daily Stats Charts...</h2>
-        </div>
+            <main className={styles.grid_item_content}><h2 style={{color: "orange"}}>Loading All Country Daily Stats Charts...</h2></main>
         ) : (
-          <div className={styles.container}>
-            <div className={styles.nav}>
-              <h3>Top 40 Countries</h3>(Sort by Confirmed Cases as of Today):
-              {majorCountries.map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCountries.includes(country)} handleCountryChange={handleCountryChange} />)}
-            </div>
-            <div className={styles.charts}>
-                <Charts timeSeries={dailyGlobalStats} countryPicked='Global' rank='' isProvince={false} />
-                {dailyStatsForCountries.map((dailyStats, i) => <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName : ''} rank={majorCountries.indexOf(dailyStats[0].countryName) + 1} isProvince={false} />)}
-                {/* <CountryPicker handleCountryChange={handleCountryChange} />
-                <Cards snapshotStats={snapshotStats} /> */}
-            </div>
-          </div>
-        )}
-        <div className={styles.Footer}>
-          <footer>
-            <p>Visitors: {visitsCounter}</p>
-            Provided by Monad Wisdom Technologies, 2020. If any suggestion, please email us at: wisdomspringtech@yahoo.com
-          </footer>
-        </div>
+            <main className={styles.grid_item_content}>
+              <Charts timeSeries={dailyGlobalStats} countryPicked='Global' rank='' isProvince={false} />
+               {dailyStatsForCountries.map((dailyStats, i) => <Charts key={i} timeSeries={dailyStats} countryPicked={dailyStats[0]? dailyStats[0].countryName : ''} rank={majorCountries.indexOf(dailyStats[0].countryName) + 1} isProvince={false} />)}
+               {/* <CountryPicker handleCountryChange={handleCountryChange} />
+               <Cards snapshotStats={snapshotStats} /> */}
+            </main>
+      )}
+      <output className={styles.grid_item_infobar}>Visitors: {visitsCounter}</output>
+      <footer className={styles.grid_item_footer}><small>Copyright &copy; Monad Wisdom Technologies. All rights reserved. If any suggestion, please email us at: wisdomspringtech@yahoo.com</small></footer> 
     </div>
   );
 };

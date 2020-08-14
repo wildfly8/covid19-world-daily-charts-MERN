@@ -34,22 +34,22 @@ const TextContainer = ({ userInfo, allAppUsers, counterparties, selectedCounterp
   return (
     <div>
       <div>
-        <h2>User Profile</h2>
+        <h4>Channels</h4>
       </div>
       <br />
       <div>
-        <h3>Direct Messages
-          <Button onClick={handlePopupOpen}>
+        <h4>Direct Messages
+          <Button onClick={handlePopupOpen} color='inherit'>
             <Icon name="plus" />
           </Button>
-        </h3>
+        </h4>
         <div>
           <DMDialogue allUsers={allAppUsers.filter(u => userInfo && u !== userInfo.name)} open={popupOpen} onClose={handlePopupClose} />
           <h4>
             {counterparties.map((counterparty, i) => (
               <div key={i}>
                 <img alt="Online Icon" src={counterparty.status? onlineIcon : closeIcon} style={{ marginRight: "5px" }} />
-                <span style={counterparty.name === selectedCounterparty? { marginRight: "5px", backgroundColor: "orange" } : { marginRight: "5px" }} ><Button className={classes.button} onClick={handleCounterpartyClicked}>{counterparty.name}</Button></span>
+                <span style={counterparty.name === selectedCounterparty? { marginRight: "5px", backgroundColor: "orange" } : { marginRight: "5px" }} ><Button color='inherit' className={classes.button} onClick={handleCounterpartyClicked}>{counterparty.name}</Button></span>
               </div>
             ))}
           </h4>

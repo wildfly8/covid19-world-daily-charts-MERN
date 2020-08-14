@@ -1,14 +1,12 @@
 import React, { useEffect, useContext } from 'react';
 import { BrowserRouter as Router, Route, useHistory } from 'react-router-dom';
 import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
-import { Container } from 'semantic-ui-react';
 import config from './config';
 import Home from './Home';
 import CustomLoginComponent from './components/Login';
 import Country from './Country';
 import Province from './Province';
 import Chat from './Chat';
-import HeaderBar from './HeaderBar';
 import Profile from './Profile';
 import { MyContext } from './MyContext';
 import { fetchVisitsCounter } from './api';
@@ -27,16 +25,13 @@ const HasAccessToRouter = () => {
       {...config.oidc}
       onAuthRequired={customAuthHandler}
     >
-      <Container fluid>
-        <HeaderBar />
-        <Route path="/" exact component={Home} />
-        <Route path="/country" component={Country} />
-        <Route path="/province" component={Province} />
-        <Route path="/implicit/callback" component={LoginCallback} />
-        <Route path="/login" component={CustomLoginComponent} />
-        <SecureRoute path="/chat" component={Chat} />
-        <SecureRoute path="/profile" component={Profile} />
-      </Container>
+      <Route path="/" exact component={Home} />
+      <Route path="/country" component={Country} />
+      <Route path="/province" component={Province} />
+      <Route path="/implicit/callback" component={LoginCallback} />
+      <Route path="/login" component={CustomLoginComponent} />
+      <SecureRoute path="/chat" component={Chat} />
+      <SecureRoute path="/profile" component={Profile} />
     </Security>
   );
 };

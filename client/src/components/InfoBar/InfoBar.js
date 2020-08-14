@@ -5,10 +5,7 @@ import './InfoBar.css';
 
 const InfoBar = ({ room }) => (
   <div className="infoBar">
-    <div className="leftInnerContainer">
-      <img className="onlineIcon" src={onlineIcon} alt="online icon" />
-      <span>{room}</span>
-    </div>
+    <img className="onlineIcon" src={onlineIcon} alt="online icon" />{room}
   </div>
 );
 

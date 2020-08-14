@@ -1,4 +1,6 @@
 .messages {
-  overflow: auto;
-  flex-grow: 1;
+  overflow-y: auto;
+  padding-left: 2em;
+  word-wrap: break-word;
+  word-break: break-all;
 }
