@@ -1,22 +1,50 @@
-.form {
+.input {
   display: flex;
-  align-items: center;
-  margin-left: 1%;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-left: 2em;
+  margin-right: 2em;
+  border: 1px solid black;
+  background-color: white;
+  max-height: 30%;
 }
 
-.input {
+.emoji {
   padding: 1em;
-  width: 90%;
+  border-right: 1px solid #bbb;
+}
+
+.content_editable {
+  flex: 1 0 0;
   font-size: 1.2em;
+  height: 100%;
+  overflow-y: auto;
+  word-wrap: break-word;
+  word-break: break-all;
+  padding: 1em;
+}
+
+[contenteditable=true]:empty:before {
+  content: attr(placeholder);
+  display: block;
+  color: #aaa;
+}
+
+.content_editable:focus {
+  outline: 0;
 }
 
 .sendButton {
   color: #fff !important;
-  text-transform: uppercase;
   text-decoration: none;
   background: #350d36;
   padding: 20px;
   display: inline-block;
   border: none;
-  width: 10%;
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  margin-left: 1%;
 }

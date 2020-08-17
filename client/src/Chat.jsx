@@ -1,13 +1,13 @@
 import { useOktaAuth } from '@okta/okta-react'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import config from './config'
-import { fetchUserLoginStatus } from './api';
+import { fetchUserLoginStatus } from './api'
 import io from "socket.io-client"
 import TextContainer from './components/TextContainer/TextContainer'
 import InfoBar from './components/InfoBar/InfoBar'
 import Messages from './components/Messages/Messages'
 import Input from './components/Input/Input'
-import HeaderBar from './HeaderBar';
+import HeaderBar from './HeaderBar'
 // @ts-ignore
 import styles from './App.module.css'
 
@@ -22,12 +22,15 @@ const Chat = () => {
   const { authState, authService } = useOktaAuth()
   const [userInfo, setUserInfo] = useState(null)
   const [allAppUsers, setAllAppUsers] = useState([])
+  const [loading, setLoading] = useState(true)
   const [counterparties, setCounterparties] = useState([])
   const [selectedCounterparty, setSelectedCounterparty] = useState(null)
   const [savedRooms, setSavedRooms] = useState([])
   const [activeRoom, setActiveRoom] = useState('')
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
+  const [typing, setTyping] = useState(false)
+  const msgConsole = useRef(null);
 
   //fetch all saved rooms from DB
   useEffect(() => {
@@ -74,10 +77,11 @@ const Chat = () => {
           counterparties.push({ name: name, status: await fetchUserLoginStatus(name) })
         }
         setCounterparties(counterparties)
-        window.scrollTo(0, document.body.scrollHeight)
+        setLoading(false)
+        // window.scrollTo(0, document.body.scrollHeight)
       }
     })()
-  }, [savedRooms])
+  }, [savedRooms, userInfo])
 
   useEffect(() => {
     if (selectedCounterparty) {
@@ -109,10 +113,15 @@ const Chat = () => {
         })
       }
     }
-  }, [selectedCounterparty])
+  }, [selectedCounterparty, userInfo])
 
-  const sendMessage = (event) => {
-    event.preventDefault()
+  useEffect(() => {
+    if(msgConsole && msgConsole.current) {
+      msgConsole.current.scrollTop = msgConsole.current.scrollHeight
+    }
+  }, [messages])
+
+  const sendMessage = () => {
     if (message) {
       if (counterpartySocketMap[selectedCounterparty]) {
         counterpartySocketMap[selectedCounterparty].emit('sendMessage', message, () => setMessage(''))
@@ -142,10 +151,13 @@ const Chat = () => {
       <main className={styles.grid_item_content}>
         {savedRoomsFetchFailed && <h2 style={{color: "orange"}}>Failed to fetch saved rooms!! Please verify: ${possibleErrors}</h2>}
         <InfoBar room={activeRoom} />
-        <Messages messages={messages} name={userInfo ? userInfo.name : ''} />
-        <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
+        {loading? 
+          <h2 style={{color: "orange"}}>{loading && 'Loading All Your Saved Channels......'}</h2>
+          : 
+          <Messages messages={messages} name={userInfo ? userInfo.name : ''} ref={msgConsole} />}
+        <Input message={message} setMessage={setMessage} sendMessage={sendMessage} setTyping={setTyping} />
       </main>
-      <output className={styles.grid_item_infobar}>info</output>
+      <output className={styles.grid_item_infobar}>{typing? `user is typing...` : null}</output>
       <footer className={styles.grid_item_footer}><small>Copyright &copy; Monad Wisdom Technologies. All rights reserved. If any suggestion, please email us at: wisdomspringtech@yahoo.com</small></footer>
     </div>
   )

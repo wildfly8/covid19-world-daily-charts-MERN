@@ -1,21 +1,21 @@
 import { useOktaAuth } from '@okta/okta-react';
 import React, { useState, useEffect, useContext } from 'react';
-import { fetchAllDailyStatsForMajorCountries, fetchAllDailyStatsForCountries, fetchDailyData } from './api';
+import { fetchDailyStatsMajorCountries, fetchAllDailyStatsForCountries, fetchGlobalDailyData } from './api';
 import Charts from './components/Charts/Charts'
 import CountryCheckbox from './components/CountryCheckbox';
 // @ts-ignore
 import styles from './App.module.css';
-import useStateWithSessionStorage from './useStateWithSessionStorage';
 import { MyContext } from './MyContext';
 import HeaderBar from './HeaderBar';
 
 let countRenders = 0;
+const majorCountriesFromSessionStorage = sessionStorage.getItem('majorCountries')
 
 const Country = () => {
   const { authState, authService } = useOktaAuth();
   const [userInfo, setUserInfo] = useState(null);
   console.log('countRenders=' + (++countRenders) + ' user=' + (!authState.isAuthenticated || !userInfo? null : userInfo.name) )
-  const [majorCountries, setMajorCountries] = useStateWithSessionStorage('majorCountries');
+  const [majorCountries, setMajorCountries] = useState(majorCountriesFromSessionStorage? majorCountriesFromSessionStorage.split(',') : [])
   const [interested, setInterested] = React.useState({interestedCountries: [], dailyStatsForCountries: []});
   const {interestedCountries, dailyStatsForCountries} = interested;
   const [dailyGlobalStats, setDailyGlobalStats] = React.useState([]);
@@ -34,14 +34,21 @@ const Country = () => {
 
   useEffect(() => {
     (async () => {
-      const majorCountries = await fetchAllDailyStatsForMajorCountries();
-      setMajorCountries(majorCountries);
-      const initCoutries = majorCountries.slice(0, 10);
-      setInterested({interestedCountries: initCoutries, dailyStatsForCountries: await fetchAllDailyStatsForCountries(initCoutries)})
-      setDailyGlobalStats(await fetchDailyData());
+      if(majorCountries.length === 0) {
+        const majorCountriesAPI = await fetchDailyStatsMajorCountries();
+        setMajorCountries(majorCountriesAPI);
+        sessionStorage.setItem('majorCountries', majorCountriesAPI);
+        const initCoutries = majorCountriesAPI.slice(0, 10)
+        setInterested({interestedCountries: initCoutries, dailyStatsForCountries: await fetchAllDailyStatsForCountries(initCoutries)})
+  
+      } else {
+        const initCoutries = majorCountries.slice(0, 10)
+        setInterested({interestedCountries: initCoutries, dailyStatsForCountries: await fetchAllDailyStatsForCountries(initCoutries)})  
+      }
+      setDailyGlobalStats(await fetchGlobalDailyData());
       setIsLoaded(true);
     })();
-  }, [setMajorCountries]);
+  }, [majorCountries]);
 
   const handleCountryChange = async (checked, country) => {
     if(checked) {
@@ -62,7 +69,7 @@ const Country = () => {
       <header className={styles.grid_item_header}><HeaderBar /></header>
       <nav className={styles.grid_item_nav}>
         <h3>Top 40 Countries</h3>(Sort by Confirmed Cases as of Today):
-        {Array.isArray(majorCountries) && majorCountries.length > 0 && majorCountries.map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCountries.includes(country)} handleCountryChange={handleCountryChange} />)}
+        {majorCountries.map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCountries.includes(country)} handleCountryChange={handleCountryChange} />)}
       </nav>
       {!isLoaded ? (
             <main className={styles.grid_item_content}><h2 style={{color: "orange"}}>Loading All Country Daily Stats Charts...</h2></main>

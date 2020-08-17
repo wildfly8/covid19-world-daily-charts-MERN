@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { fetchAllDailyStatsForProvinces } from './api';
+import { fetchDailyStatsMajorCountries, fetchAllDailyStatsForProvinces } from './api';
 import Charts from './components/Charts/Charts'
 import CountryCheckbox from './components/CountryCheckbox';
 // @ts-ignore
 import styles from './App.module.css';
-import useStateWithSessionStorage from './useStateWithSessionStorage';
 import HeaderBar from './HeaderBar';
 
 
 const screenRows = 10
+const majorCountriesFromSessionStorage = sessionStorage.getItem('majorCountries')
 
 const Province = () => {
-  const [majorCountries] = useStateWithSessionStorage('majorCountries')
-  const [interestedCountries, setInterestedCountries] = useState([majorCountries.split(',')[0]])
+  const [majorCountries, setMajorCountries] = useState(majorCountriesFromSessionStorage? majorCountriesFromSessionStorage.split(',') : [])
+  const [interestedCountries, setInterestedCountries] = useState(majorCountries.length > 0? [majorCountries[0]] : [])
   const [dailyProvinceStats, setDailyProvinceStats] = useState([])
   const [loading, setLoading] = useState(true)
   const [hasMore, setHasMore] = useState(false)
@@ -37,7 +37,13 @@ const Province = () => {
 
   useEffect(() => {
     (async () => {
-      if(majorCountries && 'null' !== majorCountries && interestedCountries && interestedCountries[0]) {
+      if(majorCountries.length === 0) {
+        const majorCountriesAPI = await fetchDailyStatsMajorCountries()
+        setMajorCountries(majorCountriesAPI)
+        sessionStorage.setItem('majorCountries', majorCountriesAPI)
+        setInterestedCountries([majorCountriesAPI[0]])
+      }
+      if(interestedCountries.length > 0) {
         setLoading(true)
         const paginatedAPIResult = await fetchAllDailyStatsForProvinces(interestedCountries[0], pageNumber)
         setDailyProvinceStats(prevStats => [...prevStats, ...paginatedAPIResult])
@@ -45,7 +51,7 @@ const Province = () => {
         setLoading(false)
       }
     })();
-  }, [majorCountries, interestedCountries, pageNumber]);
+  }, [majorCountries.length, interestedCountries, pageNumber]);
 
   const handleCountryChange = (checked, country) => {
     if(checked) {
@@ -66,7 +72,7 @@ const Province = () => {
         <header className={styles.grid_item_header}><HeaderBar /></header>
         <nav className={styles.grid_item_nav}>
           <h3>Top 40 Countries</h3>(Sort by Confirmed Cases as of Today):
-          {majorCountries.split(',').map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCountries.includes(country)} handleCountryChange={handleCountryChange} />)}
+          {majorCountries.map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCountries.includes(country)} handleCountryChange={handleCountryChange} />)}
         </nav>
         <main className={styles.grid_item_content}>
           {dailyProvinceStats.map((dailyStats, i) => {
@@ -78,7 +84,7 @@ const Province = () => {
           })}
           <h2 style={{color: "orange"}}>{loading && !hasMore && 'Loading All Province Daily Stats Charts......'}</h2>
         </main>
-        <output className={styles.grid_item_infobar}><h2 style={{color: "orange"}}>{hasMore && 'Continue Loading All Province Daily Stats Charts......'}</h2></output>
+        <output className={styles.grid_item_infobar}><h2 style={{color: "orange"}}>{loading && hasMore && 'Continue Loading All Province Daily Stats Charts......'}</h2></output>
         <footer className={styles.grid_item_footer}><small>Copyright &copy; Monad Wisdom Technologies. All rights reserved. If any suggestion, please email us at: wisdomspringtech@yahoo.com</small></footer>
       </div>
   );

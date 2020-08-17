@@ -20,6 +20,14 @@ const HasAccessToRouter = () => {
     history.push('/login');
   };
 
+  const [, setVisitsCounter] = useContext(MyContext);
+
+  useEffect(() => {
+    (async () => {
+      setVisitsCounter(await fetchVisitsCounter());
+    })();
+  }, [setVisitsCounter]);
+
   return (
     <Security
       {...config.oidc}
@@ -37,13 +45,6 @@ const HasAccessToRouter = () => {
 };
 
 const App = () => {
-  const [, setVisitsCounter] = useContext(MyContext);
-
-  useEffect(() => {
-    (async () => {
-      setVisitsCounter(await fetchVisitsCounter());
-    })();
-  }, [setVisitsCounter]);
 
   return (
     <Router>
