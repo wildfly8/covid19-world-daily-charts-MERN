@@ -1,6 +1,7 @@
 import React from 'react';
 import './Message.css';
-import ReactEmoji from 'react-emoji';
+import parse from 'html-react-parser'
+
 
 const Message = ({ message: { text, user }, name }) => {
   let isSentByCurrentUser = false;
@@ -17,7 +18,7 @@ const Message = ({ message: { text, user }, name }) => {
         <div className="messageContainer">
           <h3 className="sentText pr-10 colorWhite backgroundBlue">{trimmedName}</h3>
           <div className="messageBox">
-            <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
+            <p className="messageText colorDark">{parse(text)}</p>
           </div>
         </div>
         )
@@ -25,7 +26,7 @@ const Message = ({ message: { text, user }, name }) => {
           <div className="messageContainer">
             <h3 className="sentText pl-10 ">{user}</h3>
             <div className="messageBox backgroundLight">
-              <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
+              <p className="messageText colorDark">{parse(text)}</p>
             </div>
           </div>
         )

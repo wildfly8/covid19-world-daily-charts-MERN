@@ -27,7 +27,6 @@ const Chat = () => {
   const [selectedCounterparty, setSelectedCounterparty] = useState(null)
   const [savedRooms, setSavedRooms] = useState([])
   const [activeRoom, setActiveRoom] = useState('')
-  const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
   const [typing, setTyping] = useState(false)
   const msgConsole = useRef(null);
@@ -121,10 +120,14 @@ const Chat = () => {
     }
   }, [messages])
 
-  const sendMessage = () => {
-    if (message) {
+  const sendMessage = (msg) => {
+    if (msg) {
       if (counterpartySocketMap[selectedCounterparty]) {
-        counterpartySocketMap[selectedCounterparty].emit('sendMessage', message, () => setMessage(''))
+        counterpartySocketMap[selectedCounterparty].emit('sendMessage', msg, (error) => {
+          if (error) {
+            console.log(error)
+          }
+        })
       } else {
         alert('Please select one DM target to send a message!')
       }
@@ -155,7 +158,7 @@ const Chat = () => {
           <h2 style={{color: "orange"}}>{loading && 'Loading All Your Saved Channels......'}</h2>
           : 
           <Messages messages={messages} name={userInfo ? userInfo.name : ''} ref={msgConsole} />}
-        <Input message={message} setMessage={setMessage} sendMessage={sendMessage} setTyping={setTyping} />
+        <Input sendMessage={sendMessage} setTyping={setTyping} />
       </main>
       <output className={styles.grid_item_infobar}>{typing? `user is typing...` : null}</output>
       <footer className={styles.grid_item_footer}><small>Copyright &copy; Monad Wisdom Technologies. All rights reserved. If any suggestion, please email us at: wisdomspringtech@yahoo.com</small></footer>
