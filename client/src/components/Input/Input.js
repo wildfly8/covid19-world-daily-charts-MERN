@@ -5,7 +5,7 @@ import './Input.css'
 
 let timerId = null
 
-const Input = ({ sendMessage, setTyping }) => {
+const Input = ({ sendMessage, setMeTyping }) => {
 
   const text = useRef('');
 
@@ -28,12 +28,12 @@ const Input = ({ sendMessage, setTyping }) => {
                 // sendMessage(text.current)
                 // text.current = ''
               } else {
-
+                setMeTyping(true)
               }
             }}
             onKeyUp={() => {
               clearTimeout(timerId)
-              timerId = setTimeout(() => setTyping(false), 2000)
+              timerId = setTimeout(() => setMeTyping(false), 2000)
             }}
           />
           <button id="sendButton" type="button" className="sendButton" onClick={() => {

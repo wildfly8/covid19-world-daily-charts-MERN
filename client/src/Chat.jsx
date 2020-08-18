@@ -26,10 +26,13 @@ const Chat = () => {
   const [counterparties, setCounterparties] = useState([])
   const [selectedCounterparty, setSelectedCounterparty] = useState(null)
   const [savedRooms, setSavedRooms] = useState([])
-  const [activeRoom, setActiveRoom] = useState('')
   const [messages, setMessages] = useState([])
-  const [typing, setTyping] = useState(false)
+  const [meTyping, setMeTyping] = useState(false)
+  const [counterpartyTyping, setCounterpartyTyping] = useState(false)
   const msgConsole = useRef(null);
+  const selectedCounterpartyRef = useRef(selectedCounterparty);
+
+  selectedCounterpartyRef.current = selectedCounterparty
 
   //fetch all saved rooms from DB
   useEffect(() => {
@@ -86,7 +89,6 @@ const Chat = () => {
     if (selectedCounterparty) {
       if (counterpartySocketMap[selectedCounterparty]) {
         setMessages([{ user: null, text: `Saved messages from DB for this room with ${selectedCounterparty}. (to be done ...)` }])
-        setActiveRoom(counterpartyRoomMap[selectedCounterparty])
       } else {
         setMessages([{ user: null, text: `Saved messages from DB for this room with ${selectedCounterparty}. (to be done ...)` }])
         counterpartySocketMap[selectedCounterparty] = io(process.env.REACT_APP_EXPRESS_NODE_SERVER_ENDPOINT);
@@ -97,18 +99,24 @@ const Chat = () => {
           room = `DM-${userInfo.name}-${selectedCounterparty}`
           counterpartyRoomMap[selectedCounterparty] = room
         }
-        setActiveRoom(room)
-        const name = userInfo.name
-        counterpartySocketMap[selectedCounterparty].emit('join', { name, room }, (error) => {
+        counterpartySocketMap[selectedCounterparty].emit('join', { name : userInfo.name, room : room }, (error) => {
           if (error) {
             console.log(error)
           }
         })
-        counterpartySocketMap[selectedCounterparty].on('message', message => {
-          setMessages(prevMessages => [...prevMessages, message])
+        counterpartySocketMap[selectedCounterparty].on('message', (message) => {
+          if(message.user === 'admin' || (counterpartyRoomMap[selectedCounterpartyRef.current] && counterpartyRoomMap[selectedCounterpartyRef.current].split('-').includes(message.user))) {
+            setMessages(prevMessages => [...prevMessages, message])
+          }
+          // save to DB...
         })
         counterpartySocketMap[selectedCounterparty].on("roomData", ({ room, users }) => {
           console.log("roomData users=" + JSON.stringify(users) + ", room=" + room)
+        })
+        counterpartySocketMap[selectedCounterparty].on('counterpartyTyping', ({counterparty, counterpartyTyping}) => {
+          if(selectedCounterpartyRef.current && selectedCounterpartyRef.current === counterparty) {
+            setCounterpartyTyping(counterpartyTyping)
+          }
         })
       }
     }
@@ -119,6 +127,27 @@ const Chat = () => {
       msgConsole.current.scrollTop = msgConsole.current.scrollHeight
     }
   }, [messages])
+
+  useEffect(() => {
+    if (counterpartySocketMap[selectedCounterparty]) {
+      counterpartySocketMap[selectedCounterparty].emit('sendMeTyping', meTyping, (error) => {
+        if (error) {
+          console.log(error)
+        }
+      })
+    }
+  }, [meTyping, selectedCounterparty])
+
+  const handlePopupSelection = async (value) => {
+    if (value && !Array.isArray(value)) {
+      setSelectedCounterparty((prevSelectedCounterparty) => value)
+      if (!counterparties.map((counterparty) => counterparty.name).includes(value)) {
+        let temp = [...counterparties]
+        temp.push({ name: value, status: await fetchUserLoginStatus(value) })
+        setCounterparties(temp)
+      }
+    }
+  }
 
   const sendMessage = (msg) => {
     if (msg) {
@@ -134,17 +163,6 @@ const Chat = () => {
     }
   }
 
-  const handlePopupSelection = async (value) => {
-    if (value && !Array.isArray(value)) {
-      setSelectedCounterparty(value)
-      if (!counterparties.map((counterparty) => counterparty.name).includes(value)) {
-        let temp = [...counterparties]
-        temp.push({ name: value, status: await fetchUserLoginStatus(value) })
-        setCounterparties(temp)
-      }
-    }
-  }
-
   return (
     <div className={styles.grid_container}>
       <header className={styles.grid_item_header}><HeaderBar /></header>
@@ -153,14 +171,14 @@ const Chat = () => {
       </nav>
       <main className={styles.grid_item_content}>
         {savedRoomsFetchFailed && <h2 style={{color: "orange"}}>Failed to fetch saved rooms!! Please verify: ${possibleErrors}</h2>}
-        <InfoBar room={activeRoom} />
+        <InfoBar room={counterpartyRoomMap[selectedCounterparty]} />
         {loading? 
           <h2 style={{color: "orange"}}>{loading && 'Loading All Your Saved Channels......'}</h2>
           : 
           <Messages messages={messages} name={userInfo ? userInfo.name : ''} ref={msgConsole} />}
-        <Input sendMessage={sendMessage} setTyping={setTyping} />
+        <Input sendMessage={sendMessage} setMeTyping={setMeTyping} />
       </main>
-      <output className={styles.grid_item_infobar}>{typing? `user is typing...` : null}</output>
+      <output className={styles.grid_item_infobar}>{counterpartyTyping? `${selectedCounterparty} is typing...` : null}</output>
       <footer className={styles.grid_item_footer}><small>Copyright &copy; Monad Wisdom Technologies. All rights reserved. If any suggestion, please email us at: wisdomspringtech@yahoo.com</small></footer>
     </div>
   )

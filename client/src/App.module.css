@@ -58,6 +58,7 @@ body {
     grid-row: span 1; */
     grid-area: infobar;
     padding-left: 2em;
+    color: grey;
 }
 
 .grid_item_footer {

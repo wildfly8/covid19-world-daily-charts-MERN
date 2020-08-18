@@ -18,7 +18,7 @@ const Message = ({ message: { text, user }, name }) => {
         <div className="messageContainer">
           <h3 className="sentText pr-10 colorWhite backgroundBlue">{trimmedName}</h3>
           <div className="messageBox">
-            <p className="messageText colorDark">{parse(text)}</p>
+            <div className="messageText colorDark">{parse(text)}</div>
           </div>
         </div>
         )
@@ -26,7 +26,7 @@ const Message = ({ message: { text, user }, name }) => {
           <div className="messageContainer">
             <h3 className="sentText pl-10 ">{user}</h3>
             <div className="messageBox backgroundLight">
-              <p className="messageText colorDark">{parse(text)}</p>
+              <div className="messageText colorDark">{parse(text)}</div>
             </div>
           </div>
         )
