@@ -1,23 +1,14 @@
-import { useOktaAuth } from '@okta/okta-react';
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Icon, Menu } from 'semantic-ui-react';
 // @ts-ignore
 import styles from './App.module.css'
+import { MyContext } from './MyContext';
 
 
 const HeaderBar = () => {
-  const { authState, authService } = useOktaAuth();
-  const [userInfo, setUserInfo] = useState(null);
-
-  useEffect(() => {
-    if (!authState.isAuthenticated) {
-      setUserInfo(null);
-    } else {
-      authService.getUser().then((info) => {
-        setUserInfo(info);
-      });
-    }
-  }, [authState, authService]);
+  const {user, auth} = useContext(MyContext)
+  const [userInfo, ] = user;
+  const [authState, authService] = auth;
 
 
   const login = async () => authService.login('/');

@@ -1,5 +1,4 @@
-import { useOktaAuth } from '@okta/okta-react'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import config from './config'
 import { fetchUserLoginStatus } from './api'
 import io from "socket.io-client"
@@ -10,6 +9,7 @@ import Input from './components/Input/Input'
 import HeaderBar from './HeaderBar'
 // @ts-ignore
 import styles from './App.module.css'
+import { MyContext } from './MyContext'
 
 
 //temp
@@ -19,8 +19,6 @@ let counterpartySocketMap = {}
 let counterpartyRoomMap = {}
 
 const Chat = () => {
-  const { authState, authService } = useOktaAuth()
-  const [userInfo, setUserInfo] = useState(null)
   const [allAppUsers, setAllAppUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [counterparties, setCounterparties] = useState([])
@@ -29,6 +27,11 @@ const Chat = () => {
   const [messages, setMessages] = useState([])
   const [meTyping, setMeTyping] = useState(false)
   const [counterpartyTyping, setCounterpartyTyping] = useState(false)
+
+  const { user, auth } = useContext(MyContext);
+  const [userInfo, ] = user;
+  const [authState, authService] = auth;
+
   const msgConsole = useRef(null);
   const selectedCounterpartyRef = useRef(selectedCounterparty);
 
@@ -36,29 +39,25 @@ const Chat = () => {
 
   //fetch all saved rooms from DB
   useEffect(() => {
-    if (authState.isAuthenticated) {
-      authService.getUser().then((info) => {
-        const { accessToken } = authState
-        setUserInfo(info)
-        fetch(`${config.resourceServer.roomsUrl}?user=${info.sub}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }).then((response) => {
-          if (!response.ok) {
-            return Promise.reject()
-          }
-          return response.json()
-        }).then((data) => {
-          setAllAppUsers(data.allAppUsers)
-          setSavedRooms(data.rooms)
-        }).catch((err) => {
-          savedRoomsFetchFailed = true
-          console.error(err)
-        });
-      });
+    if (authState.isAuthenticated && userInfo && userInfo.sub) {
+      fetch(`${config.resourceServer.roomsUrl}?user=${userInfo.sub}`, {
+        headers: {
+          Authorization: `Bearer ${authState[`accessToken`]}`,
+        },
+      }).then((response) => {
+        if (!response.ok) {
+          return Promise.reject()
+        }
+        return response.json()
+      }).then((data) => {
+        setAllAppUsers(data.allAppUsers)
+        setSavedRooms(data.rooms)
+      }).catch((err) => {
+        savedRoomsFetchFailed = true
+        console.error(err)
+      })
     }
-  }, [authState, authService])
+  }, [authState, authService, userInfo])
 
   useEffect(() => {
     (async () => {

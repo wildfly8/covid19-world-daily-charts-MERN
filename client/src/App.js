@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, useHistory } from 'react-router-dom';
 import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
 import config from './config';
@@ -8,8 +8,7 @@ import Country from './Country';
 import Province from './Province';
 import Chat from './Chat';
 import Profile from './Profile';
-import { MyContext } from './MyContext';
-import { fetchVisitsCounter } from './api';
+import { MyContextProvider } from './MyContext';
 
 
 const HasAccessToRouter = () => {
@@ -20,19 +19,12 @@ const HasAccessToRouter = () => {
     history.push('/login');
   };
 
-  const [, setVisitsCounter] = useContext(MyContext);
-
-  useEffect(() => {
-    (async () => {
-      setVisitsCounter(await fetchVisitsCounter());
-    })();
-  }, [setVisitsCounter]);
-
   return (
-    <Security
+  <Security
       {...config.oidc}
       onAuthRequired={customAuthHandler}
-    >
+  >
+    <MyContextProvider>
       <Route path="/" exact component={Home} />
       <Route path="/country" component={Country} />
       <Route path="/province" component={Province} />
@@ -40,7 +32,8 @@ const HasAccessToRouter = () => {
       <Route path="/login" component={CustomLoginComponent} />
       <SecureRoute path="/chat" component={Chat} />
       <SecureRoute path="/profile" component={Profile} />
-    </Security>
+    </MyContextProvider>
+  </Security>
   );
 };
 

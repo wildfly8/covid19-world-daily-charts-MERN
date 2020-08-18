@@ -1,4 +1,3 @@
-import { useOktaAuth } from '@okta/okta-react';
 import React, { useState, useEffect, useContext } from 'react';
 import { fetchDailyStatsMajorCountries, fetchAllDailyStatsForCountries, fetchGlobalDailyData } from './api';
 import Charts from './components/Charts/Charts'
@@ -8,29 +7,16 @@ import styles from './App.module.css';
 import { MyContext } from './MyContext';
 import HeaderBar from './HeaderBar';
 
-let countRenders = 0;
 const majorCountriesFromSessionStorage = sessionStorage.getItem('majorCountries')
 
 const Country = () => {
-  const { authState, authService } = useOktaAuth();
-  const [userInfo, setUserInfo] = useState(null);
-  console.log('countRenders=' + (++countRenders) + ' user=' + (!authState.isAuthenticated || !userInfo? null : userInfo.name) )
   const [majorCountries, setMajorCountries] = useState(majorCountriesFromSessionStorage? majorCountriesFromSessionStorage.split(',') : [])
-  const [interested, setInterested] = React.useState({interestedCountries: [], dailyStatsForCountries: []});
+  const [interested, setInterested] = useState({interestedCountries: [], dailyStatsForCountries: []});
   const {interestedCountries, dailyStatsForCountries} = interested;
-  const [dailyGlobalStats, setDailyGlobalStats] = React.useState([]);
-  const [isLoaded, setIsLoaded] = React.useState(false);
-  const [visitsCounter] = useContext(MyContext);
-
-  useEffect(() => {
-    if (!authState.isAuthenticated) {
-      setUserInfo(null);
-    } else {
-      authService.getUser().then((info) => {
-        setUserInfo(info);
-      });
-    }
-  }, [authState, authService]); // Update if authState changes
+  const [dailyGlobalStats, setDailyGlobalStats] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const { visits } = useContext(MyContext);
+  const [visitsCounter, ] = visits;
 
   useEffect(() => {
     (async () => {
@@ -57,12 +43,6 @@ const Country = () => {
       setInterested({interestedCountries: interestedCountries.filter(item => country !== item), dailyStatsForCountries: dailyStatsForCountries.filter(dailyStats => country !== dailyStats[0].countryName.replace(/,/g, ';'))})
     }
   };
-
-  if (authState.isPending) {
-    return (
-      <div>Loading...</div>
-    );
-  }
 
   return (
     <div className={styles.grid_container}>
