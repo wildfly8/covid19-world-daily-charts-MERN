@@ -15,7 +15,7 @@ const HeaderBar = () => {
   const logout = async () => authService.logout('/');
 
   return (
-      <div className={styles.grid_item_header}>
+      <div className={styles.app_header}>
           <Menu.Item as="a" header href="/" style={{color: "white"}}><Icon name="home" />Home</Menu.Item>
           <Menu.Item as="a" header href="/country" style={{color: "white"}}><Icon name="chart line" />Covid-19 Daily Stats by Country</Menu.Item>
           <Menu.Item as="a" header href="/province" style={{color: "white"}}><Icon name="chart bar" />Covid-19 Daily Stats by Province</Menu.Item>

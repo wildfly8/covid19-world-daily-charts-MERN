@@ -4,7 +4,6 @@ import Charts from './components/Charts/Charts'
 import CountryCheckbox from './components/CountryCheckbox';
 // @ts-ignore
 import styles from './App.module.css';
-import HeaderBar from './HeaderBar';
 
 
 const screenRows = 10
@@ -69,7 +68,6 @@ const Province = () => {
 
   return (
       <div className={styles.grid_container}>
-        <header className={styles.grid_item_header}><HeaderBar /></header>
         <nav className={styles.grid_item_nav}>
           <h3>Top 40 Countries</h3>(Sort by Confirmed Cases as of Today):
           {majorCountries.map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCountries.includes(country)} handleCountryChange={handleCountryChange} />)}

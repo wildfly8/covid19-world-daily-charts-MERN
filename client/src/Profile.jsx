@@ -1,13 +1,12 @@
 import React, { useContext } from 'react'
 import { Header, Icon, Table } from 'semantic-ui-react'
-import HeaderBar from './HeaderBar';
-// @ts-ignore
-import styles from './App.module.css'
 import { MyContext } from './MyContext'
+// @ts-ignore
+import styles from './App.module.css';
 
 
 const Profile = () => {
-  const {user} = useContext(MyContext)
+  const { user } = useContext(MyContext)
   const [userInfo, ] = user;
 
   if (!userInfo) {
@@ -19,9 +18,7 @@ const Profile = () => {
   }
 
   return (
-    <div>
-      <header className={styles.grid_item_header}><HeaderBar /></header>
-      <div>
+      <div className={styles.grid_container}>
         <Header as="h1">
           <Icon name="drivers license" />
           {' '}
@@ -50,7 +47,6 @@ const Profile = () => {
           </tbody>
         </Table>
       </div>
-    </div>
   )
 }
 

@@ -9,6 +9,9 @@ import Province from './Province';
 import Chat from './Chat';
 import Profile from './Profile';
 import { MyContextProvider } from './MyContext';
+import HeaderBar from './HeaderBar';
+// @ts-ignore
+import styles from './App.module.css'
 
 
 const HasAccessToRouter = () => {
@@ -25,13 +28,16 @@ const HasAccessToRouter = () => {
       onAuthRequired={customAuthHandler}
   >
     <MyContextProvider>
-      <Route path="/" exact component={Home} />
-      <Route path="/country" component={Country} />
-      <Route path="/province" component={Province} />
-      <Route path="/implicit/callback" component={LoginCallback} />
-      <Route path="/login" component={CustomLoginComponent} />
-      <SecureRoute path="/chat" component={Chat} />
-      <SecureRoute path="/profile" component={Profile} />
+      <div className={styles.app_body}>
+        <HeaderBar />
+        <Route path="/" exact component={Home} />
+        <Route path="/country" component={Country} />
+        <Route path="/province" component={Province} />
+        <Route path="/implicit/callback" component={LoginCallback} />
+        <Route path="/login" component={CustomLoginComponent} />
+        <SecureRoute path="/chat" component={Chat} />
+        <SecureRoute path="/profile" component={Profile} />
+      </div>
     </MyContextProvider>
   </Security>
   );

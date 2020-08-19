@@ -5,14 +5,14 @@ import CountryCheckbox from './components/CountryCheckbox';
 // @ts-ignore
 import styles from './App.module.css';
 import { MyContext } from './MyContext';
-import HeaderBar from './HeaderBar';
+
 
 const majorCountriesFromSessionStorage = sessionStorage.getItem('majorCountries')
 
 const Country = () => {
   const [majorCountries, setMajorCountries] = useState(majorCountriesFromSessionStorage? majorCountriesFromSessionStorage.split(',') : [])
   const [interested, setInterested] = useState({interestedCountries: [], dailyStatsForCountries: []});
-  const {interestedCountries, dailyStatsForCountries} = interested;
+  const { interestedCountries, dailyStatsForCountries } = interested;
   const [dailyGlobalStats, setDailyGlobalStats] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const { visits } = useContext(MyContext);
@@ -46,7 +46,6 @@ const Country = () => {
 
   return (
     <div className={styles.grid_container}>
-      <header className={styles.grid_item_header}><HeaderBar /></header>
       <nav className={styles.grid_item_nav}>
         <h3>Top 40 Countries</h3>(Sort by Confirmed Cases as of Today):
         {majorCountries.map((country, i) => <CountryCheckbox key={i} checkboxLabel={country} checked={interestedCountries.includes(country)} handleCountryChange={handleCountryChange} />)}

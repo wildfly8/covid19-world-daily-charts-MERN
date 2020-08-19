@@ -6,7 +6,6 @@ import TextContainer from './components/TextContainer/TextContainer'
 import InfoBar from './components/InfoBar/InfoBar'
 import Messages from './components/Messages/Messages'
 import Input from './components/Input/Input'
-import HeaderBar from './HeaderBar'
 // @ts-ignore
 import styles from './App.module.css'
 import { MyContext } from './MyContext'
@@ -34,7 +33,6 @@ const Chat = () => {
 
   const msgConsole = useRef(null);
   const selectedCounterpartyRef = useRef(selectedCounterparty);
-
   selectedCounterpartyRef.current = selectedCounterparty
 
   //fetch all saved rooms from DB
@@ -164,7 +162,6 @@ const Chat = () => {
 
   return (
     <div className={styles.grid_container}>
-      <header className={styles.grid_item_header}><HeaderBar /></header>
       <nav className={styles.grid_item_nav} style={{color: "white", backgroundColor: "#350d36"}}>
         <TextContainer userInfo={userInfo} allAppUsers={allAppUsers} counterparties={counterparties} selectedCounterparty={selectedCounterparty} setSelectedCounterparty={setSelectedCounterparty} handlePopupSelection={handlePopupSelection} />
       </nav>

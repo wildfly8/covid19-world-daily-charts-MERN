@@ -1,5 +1,4 @@
 import React from 'react'
-import HeaderBar from './HeaderBar'
 // @ts-ignore
 import styles from './App.module.css'
 
@@ -7,7 +6,6 @@ import styles from './App.module.css'
 const Home = () => {
   return (
     <div className={styles.grid_container}>
-      <header className={styles.grid_item_header}><HeaderBar /></header>
       <nav className={styles.grid_item_nav}><h4>Software Development Learning through examples:</h4> 1) MERN stack with React, Okta 
         <br/><br/> 2) MEAN stack with Angular <br/><br/> 3) Spring Boot with Java <br/><br/> 4) Kafka/Cassandra/Spark/Redis Pipeline
         <br/><h4>Academic Learning:</h4> 1) Math <br/><br/>2) Physics <br/><br/>3) Computer Science <br/><br/>3) Economics <br/><br/>4) Statistics

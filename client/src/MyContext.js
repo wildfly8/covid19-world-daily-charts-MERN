@@ -9,7 +9,6 @@ export const MyContextProvider = (props) => {
   const [visitsCounter, setVisitsCounter] = useState(0)
   const [userInfo, setUserInfo] = useState(null);
   const { authState, authService } = useOktaAuth();
-  console.log(`useOktaAuth...user=${userInfo}`)
 
   useEffect(() => {
     (async () => {
@@ -25,7 +24,6 @@ export const MyContextProvider = (props) => {
         setUserInfo(info);
       });
     }
-    console.log(`auth checking...user=${userInfo}`)
   }, [authState, authService]);
 
   return (
