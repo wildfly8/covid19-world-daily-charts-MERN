@@ -8,13 +8,13 @@ const Home = () => {
     <div className={styles.grid_container}>
       <nav className={styles.grid_item_nav}><h4>Software Development Learning through examples:</h4> 1) MERN stack with React, Okta 
         <br/><br/> 2) MEAN stack with Angular <br/><br/> 3) Spring Boot with Java <br/><br/> 4) Kafka/Cassandra/Spark/Redis Pipeline
-        <br/><h4>Academic Learning:</h4> 1) Math <br/><br/>2) Physics <br/><br/>3) Computer Science <br/><br/>3) Economics <br/><br/>4) Statistics
+        <br/><h4>Academic Learning:</h4> 1) Math <br/><br/>2) Statistics <br/><br/>3) Physics <br/><br/>4) Computer Science <br/><br/>5) Economics
       </nav>
       <main className={styles.grid_item_content}>
         <div style={{ paddingLeft: "2em",  paddingRight: "2em"}}>
         <h4>About US:</h4>
 		    <p>
-            If you're a delicate observer of our daily life encounters, you'll find people are yearning for aquiring new knowledge and
+            If you're a delicate observer of our daily life encounters, you'll find people are yearning for aquiring new understanding and
             inspiration every single day, if not every single minute. Even though many people claim they're loving to teach
             and share their ideas to others, the truth is, ultimately they hope to learn some new valuable things from their
             actve interaction with others. No one enjoys repetitive work or life as another day passes without any new findings. This
