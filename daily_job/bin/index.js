@@ -23,14 +23,14 @@ const DB_NAME = 'covid19';
         conn.once('open', () => console.log('Opened DB connection'));
         conn.once('close', () => console.log('Closed DB connection'));
         conn.db.listCollections({name: 'country_daily_stats'}).next(function(err, allCollectionNames) {
-        if (allCollectionNames) {
-            if (err) {
-                console.log(err);
-                return;
+            if (allCollectionNames) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                CountryDailyCovidStats.collection.drop();
+                console.log('Collection country_daily_stats has been dropped successfully.');
             }
-            CountryDailyCovidStats.collection.drop();
-            console.log('Collection country_daily_stats has been dropped successfully.');
-        }
         });
         conn.db.listCollections({name: 'province_daily_stats'}).next(function(err, allCollectionNames) {
             if (allCollectionNames) {
