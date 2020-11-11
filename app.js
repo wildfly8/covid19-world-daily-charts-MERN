@@ -44,7 +44,7 @@ app.use(function(err, req, res, next) {
 });
 
 //setup mongoDB datasource
-mongoose.connect(process.env.MONGODB_URI, {
+mongoose.connect(process.env.MONGODB_COVID19_DB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,

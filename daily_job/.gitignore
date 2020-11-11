@@ -2,3 +2,4 @@
 /node_modules
 /dump
 daily_job.cmd
+.env

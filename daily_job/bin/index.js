@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+require('dotenv').config()
 const mongoose = require('mongoose');
 const { default: axios } = require('axios');
 const CountryDailyCovidStats = require('./CountryDailyCovidStats.js')
@@ -7,13 +8,12 @@ const ProvinceDailyCovidStats = require('./ProvinceDailyCovidStats.js')
 const url = "https://api.covid19api.com";
 const url2 = "https://covidtracking.com/api/states/daily";
 const url3 = "https://covidtracking.com/api/us/daily";
-const DB_NAME = 'covid19';
 
 (async () => {
     let conn = null;
     try {
         //open MongoDB covid19 db connection
-        await mongoose.connect('mongodb://localhost/' + DB_NAME, {
+        await mongoose.connect(process.env.MONGODB_COVID19_DB_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });

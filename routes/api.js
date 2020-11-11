@@ -7,7 +7,6 @@ const siteViews = require('../models/visits');
 const SiteViewsUp = require('../site_analysis/visitsUp');
 const sampleConfig = require('../config.js');
 const axios = require("axios");
-const { response } = require('express');
 
 
 const oktaJwtVerifier = new OktaJwtVerifier({
